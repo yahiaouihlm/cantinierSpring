@@ -5,11 +5,10 @@ import fr.sqli.cantine.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-public interface IcommandeDao {
     @Repository
-    public interface IUserDao extends JpaRepository<CommandeEntity, Integer> {
+    public interface IcommandeDao extends JpaRepository<CommandeEntity, Integer> {
 
     }
 
 
-}
+
