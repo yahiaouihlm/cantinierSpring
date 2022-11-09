@@ -18,5 +18,4 @@ public class UserUpdateService {
     public void updateUser() {
         userUpdateService.updateUser();
     }
-
 }
