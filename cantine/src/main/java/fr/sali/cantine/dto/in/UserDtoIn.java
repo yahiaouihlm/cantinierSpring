@@ -1,9 +1,9 @@
 package fr.sali.cantine.dto.in;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import fr.sali.cantine.entity.CommandeEntity;
 import fr.sali.cantine.entity.UserEntity;
 
-import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -38,14 +38,74 @@ public class UserDtoIn {
     private List<CommandeEntity> commandes;
 
 
+    /**
+     * @doc  La méthode check si  les argument de login (email ,  password ) ,  que email termine avec @social.aston-ecole.com
+     * @throws IllegalArgumentException si  email ou  password  sont null  ou  leur taille  est inférieur < 4  ou email  termine pas avec @social.aston-ecole.cpm
+     */
 
+    @JsonIgnore
+    public void  validateSignInInformation () throws IllegalArgumentException{
+        if (this.password == null  || this.email == null)
+             throw  new IllegalArgumentException("ivalide Connexion Argument ");
+        if (this.password.length() < 4 || this.email.length() < 4 )
+            throw  new IllegalArgumentException("ivalide lenght Argument ");
 
-
-
-     public UserEntity toEntity() {
-         var  UserEntity = new UserEntity( this.username ,  this.userfname , this.email ,  );
+         validationUserEmail ();
      }
 
+    /**
+     * @doc  construire un userEntity avec la  validations des Arguments
+     * @return userEntity
+     * @throws  IllegalArgumentException si  un  des arguments  passsé en  paramétre est vide ou  null
+     */
+    @JsonIgnore
+    public UserEntity toEntity() throws  IllegalArgumentException {
+         validateUserNullableOrEmptyInformation ();
+         validateLenghtUserInformation();
+         validationUserEmail();
+        var  user = new UserEntity( this.username ,  this.userfname , this.email ,  this.birthday,  this.password);
+
+         return   user  ;
+     }
+
+
+
+
+    /**
+     * @doc    La fonction  teste si  l'email  d'enregistrement n'est pas de aston il termine pas avec "@social.aston-ecole.com"
+     * @throws IllegalArgumentException
+     */
+    @JsonIgnore
+    public void validationUserEmail ()throws  IllegalArgumentException{
+        if (this.email.endsWith("@social.aston-ecole.com") == false )
+            throw  new  IllegalArgumentException("Invalid Email ");
+    }
+
+
+    /**
+     * @doc  vérifier la taille du  mot de passe et  nom  et prenom
+     * @throws IllegalArgumentException si  la taille du  mot de passe ou  email   inférieure à 4
+     */
+    @JsonIgnore
+    public  void validateLenghtUserInformation()throws  IllegalArgumentException {
+        if (this.username.length() < 4 || this.userfname.length() < 4 ||  this.password.length() < 4 )
+            throw new IllegalArgumentException("Invalide Lenght Arguments");
+    }
+
+
+
+    /**
+     * @doc   Vérifier que  username ,  userfname ,  user,email ,  mot de passe birthday sont pas null  ou  bide
+     * @throws IllegalArgumentException si  les arguments  sont null  ou   vide
+     */
+    @JsonIgnore
+    public void  validateUserNullableOrEmptyInformation  () throws  IllegalArgumentException{
+        if (this.username == null  || this.userfname == null || this.email == null || this.password == null || this.birthday == null)
+            throw  new  IllegalArgumentException("Ivalid Argument") ;
+
+        if (this.username.trim().isEmpty() ||  this.userfname .trim().isEmpty() || this.email .trim().isEmpty() || this.password.trim().isEmpty())
+            throw  new IllegalArgumentException("Ivalid Argument");
+    }
 
 
 

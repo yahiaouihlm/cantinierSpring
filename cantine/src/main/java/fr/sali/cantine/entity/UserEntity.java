@@ -4,7 +4,6 @@ import java.io.Serializable;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 
@@ -19,19 +18,19 @@ public class UserEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(unique=true, nullable=false)
 	private Integer id;
 
-	@Temporal(TemporalType.DATE)
+
 	@Column(nullable=false)
 	private LocalDate birthday;
 
-	@Temporal(TemporalType.DATE)
+
 	@Column(name="creation_date")
 	private LocalDate creationDate;
 
-	@Column(nullable=false, precision=5, scale=2)
+	@Column(precision=5, scale=2)
 	private BigDecimal credit;
 
 	@Column(nullable=false, length=255)
@@ -69,18 +68,34 @@ public class UserEntity implements Serializable {
 	private List<RoleEntity> roles;
 
 	//bi-directional many-to-one association to ImageEntity
-	@ManyToOne
+	@ManyToOne( cascade = CascadeType.ALL)
 	@JoinColumn(name="userimage")
 	private ImageEntity image;
 
 	public UserEntity() {
 	}
-    public UserEntity(String username ,  String userfname ,  String  email , String password ,  LocalDate birthday ){
+
+	/**
+	 * @doc Le userEntity contructeur initialise username , userfamilyname , email , birthday , password
+	 * @param username
+	 * @param userfname
+	 * @param email
+	 * @param birthday
+	 * @param  password
+	 */
+    public UserEntity(String username ,  String userfname ,  String  email , LocalDate birthday,  String password ){
 		this.userfname = userfname;
 		this.username = username ;
 		this.email =  email ;
 		this.birthday = birthday;
+		this.password =  password ;
 	}
+
+
+
+
+
+
 	public Integer getId() {
 		return this.id;
 	}
