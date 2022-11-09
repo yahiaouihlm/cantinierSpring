@@ -1,11 +1,10 @@
 package fr.sali.cantine.service;
 
-import fr.sali.cantine.dto.in.UserDtoIn;
+import fr.sali.cantine.dto.in.UserDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class AuthentificationServiceTest {
 
@@ -15,7 +14,7 @@ class AuthentificationServiceTest {
 
     @Test
     public void   AuthentificationService (){
-        UserDtoIn userdto =  new UserDtoIn();
+        UserDto userdto =  new UserDto();
         userdto.setEmail("yahiaouihalim@social.aston-ecole.com");
         userdto.setPassword("test33");
 

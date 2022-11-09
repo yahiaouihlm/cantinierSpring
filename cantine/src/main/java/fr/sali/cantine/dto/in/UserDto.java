@@ -3,13 +3,16 @@ package fr.sali.cantine.dto.in;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import fr.sali.cantine.entity.CommandeEntity;
 import fr.sali.cantine.entity.UserEntity;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.regex.Pattern;
 
-public class UserDtoIn {
-
+public class UserDto {
+    private static final Logger LOG = LogManager.getLogger();
 
     private Integer id;
 
@@ -39,6 +42,26 @@ public class UserDtoIn {
 
 
     /**
+     * @doc  la méthode permet de vérifié si la "syntaxe" du  numéro téléphone française  est  valide en  la matchant  avec une regex
+     * @throws IllegalArgumentException  si  le numéro  ne matche pas avec la regex du  numéro de téléphone
+     */
+    @JsonIgnore
+    public void phoneValidator ()throws  IllegalArgumentException{
+
+           if (this.phone == null)
+                   throw  new IllegalArgumentException("Invalid Password ") ;
+
+            String regex = "^(?:(?:\\+|00)33|0)\\s*[1-9](?:[\\s.-]*\\d{2}){4}$";
+            Pattern pattern = Pattern.compile(regex);
+
+          if( !(pattern.matcher(this.phone).matches()) ) {
+              throw new IllegalArgumentException("Invalide Phone Number");
+          }
+
+    }
+
+
+    /**
      * @doc  La méthode check si  les argument de login (email ,  password ) ,  que email termine avec @social.aston-ecole.com
      * @throws IllegalArgumentException si  email ou  password  sont null  ou  leur taille  est inférieur < 4  ou email  termine pas avec @social.aston-ecole.cpm
      */
@@ -46,9 +69,9 @@ public class UserDtoIn {
     @JsonIgnore
     public void  validateSignInInformation () throws IllegalArgumentException{
         if (this.password == null  || this.email == null)
-             throw  new IllegalArgumentException("ivalide Connexion Argument ");
+             throw  new IllegalArgumentException("Invalide Connexion Argument ");
         if (this.password.length() < 4 || this.email.length() < 4 )
-            throw  new IllegalArgumentException("ivalide lenght Argument ");
+            throw  new IllegalArgumentException("Invalide lenght Argument ");
 
          validationUserEmail ();
      }
@@ -64,7 +87,9 @@ public class UserDtoIn {
          validateLenghtUserInformation();
          validationUserEmail();
         var  user = new UserEntity( this.username ,  this.userfname , this.email ,  this.birthday,  this.password);
-
+        if (this.phone != null )
+            phoneValidator();
+        user.setPhone(this.phone);
          return   user  ;
      }
 

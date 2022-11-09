@@ -55,7 +55,7 @@ public class UserEntity implements Serializable {
 	private List<CommandeEntity> commandes;
 
 	//bi-directional many-to-many association to RoleEntity
-	@ManyToMany
+	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(
 		name="user_has_role"
 		, joinColumns={

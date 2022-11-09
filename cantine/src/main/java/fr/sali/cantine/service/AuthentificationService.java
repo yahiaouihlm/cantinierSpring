@@ -2,7 +2,7 @@ package fr.sali.cantine.service;
 
 
 import fr.sali.cantine.dao.IUserDao;
-import fr.sali.cantine.dto.in.UserDtoIn;
+import fr.sali.cantine.dto.in.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,7 +23,7 @@ public class AuthentificationService {
      * @throws IllegalArgumentException si  email  , login  sont incorrect
      */
 
-    public Integer authentification (UserDtoIn usersignin) throws  IllegalArgumentException{
+    public Integer authentification (UserDto usersignin) throws  IllegalArgumentException{
         usersignin.validateSignInInformation ();
         var userpassword  =  usersignin.getPassword();
         var userlogin    =  usersignin.getEmail();
