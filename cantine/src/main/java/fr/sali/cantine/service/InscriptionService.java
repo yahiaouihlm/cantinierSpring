@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+
 
 @Service
 public class InscriptionService {
@@ -13,7 +15,7 @@ public class InscriptionService {
     private BCryptPasswordEncoder encoder;
 
     private IUserDao    userDao ;
-    public UserEntity  Inscription (String username ,  String userfname ,  String  email , String password ,   birthday ){
+    public UserEntity  Inscription ( D ){
 
     }
 

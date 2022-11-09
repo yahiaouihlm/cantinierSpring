@@ -3,6 +3,7 @@ package fr.sali.cantine.entity;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.sql.Time;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -23,7 +24,7 @@ public class CommandeEntity implements Serializable {
 
 	@Temporal(TemporalType.DATE)
 	@Column(nullable=false)
-	private Date datecreation;
+	private LocalDate datecreation;
 
 	private Time heurecreation;
 
@@ -58,11 +59,11 @@ public class CommandeEntity implements Serializable {
 		this.idcommande = idcommande;
 	}
 
-	public Date getDatecreation() {
+	public LocalDate getDatecreation() {
 		return this.datecreation;
 	}
 
-	public void setDatecreation(Date datecreation) {
+	public void setDatecreation(LocalDate datecreation) {
 		this.datecreation = datecreation;
 	}
 
