@@ -3,6 +3,7 @@ package fr.sali.cantine.entity;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -24,11 +25,11 @@ public class UserEntity implements Serializable {
 
 	@Temporal(TemporalType.DATE)
 	@Column(nullable=false)
-	private Date birthday;
+	private LocalDate birthday;
 
 	@Temporal(TemporalType.DATE)
 	@Column(name="creation_date")
-	private Date creationDate;
+	private LocalDate creationDate;
 
 	@Column(nullable=false, precision=5, scale=2)
 	private BigDecimal credit;
@@ -74,7 +75,12 @@ public class UserEntity implements Serializable {
 
 	public UserEntity() {
 	}
-
+    public UserEntity(String username ,  String userfname ,  String  email , String password ,  LocalDate birthday ){
+		this.userfname = userfname;
+		this.username = username ;
+		this.email =  email ;
+		this.birthday = birthday;
+	}
 	public Integer getId() {
 		return this.id;
 	}
@@ -83,19 +89,19 @@ public class UserEntity implements Serializable {
 		this.id = id;
 	}
 
-	public Date getBirthday() {
+	public LocalDate getBirthday() {
 		return this.birthday;
 	}
 
-	public void setBirthday(Date birthday) {
+	public void setBirthday(LocalDate birthday) {
 		this.birthday = birthday;
 	}
 
-	public Date getCreationDate() {
+	public LocalDate getCreationDate() {
 		return this.creationDate;
 	}
 
-	public void setCreationDate(Date creationDate) {
+	public void setCreationDate(LocalDate creationDate) {
 		this.creationDate = creationDate;
 	}
 
