@@ -1,6 +1,7 @@
 package fr.sali.cantine.controleur;
 
 
+import fr.sali.cantine.dto.in.UserDto;
 import fr.sali.cantine.service.InscriptionService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,8 +24,25 @@ public class IncriptionControleur {
     public String inscription (@RequestParam("username") String username, @RequestParam("userfname") String userfname , @RequestParam("email") String email,
                                @RequestParam("password") String password , @RequestParam("birthday")LocalDate birthday ,  @RequestParam("phone") String phone){
 
+        try {
 
-        return  null ;
+            UserDto user  = new UserDto();
+            user.setPassword(password);
+            user.setEmail(email);
+            user.setUserfname(userfname);
+            user.setBirthday(birthday);
+            user.setPhone(phone);
+            user.setUsername(username);
+
+
+            serciceInscription.inscription(user);
+        } catch ( Exception e) {
+            System.out.println(e);
+          return  "KO" ;
+
+        }
+
+        return  "OK" ;
     }
 
 

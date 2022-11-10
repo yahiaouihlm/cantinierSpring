@@ -32,7 +32,7 @@ public class PlatEntity implements Serializable {
 	@Column(nullable=false, precision=5, scale=2)
 	private BigDecimal prixht;
 
-	@Column(nullable=false, length=45)
+
 	private String quantite;
 
 	@Column(nullable=false)
@@ -52,7 +52,7 @@ public class PlatEntity implements Serializable {
 	private List<MenuEntity> menus;
 
 	//bi-directional many-to-one association to ImageEntity
-	@ManyToOne
+	@ManyToOne(cascade =  CascadeType.ALL)
 	@JoinColumn(name="image_idimage", nullable=false)
 	private ImageEntity image;
 
