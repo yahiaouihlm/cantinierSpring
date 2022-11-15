@@ -54,7 +54,7 @@ public class InscriptionService {
          fis.close();
          user.setImage(imageEntity);
 
-
+         /* Test son  email   */
         return userDao.save(user);
 
     }

@@ -30,10 +30,10 @@ public class AuthentificationService {
 
         var user = userDao.findByEmail(userlogin);
         if (!user.isPresent()){
-            throw  new IllegalArgumentException("Invalid password ") ;
+            throw  new IllegalArgumentException("Invalid password OR Email") ;
         }
         if (!this.password.matches(userpassword , user.get().getPassword() )){
-            throw  new IllegalArgumentException("Invalid password ") ;
+            throw  new IllegalArgumentException("Invalid password OR Email ") ;
         }
 
 

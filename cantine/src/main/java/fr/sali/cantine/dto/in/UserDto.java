@@ -103,7 +103,8 @@ public class UserDto {
     @JsonIgnore
     public void validationUserEmail ()throws  IllegalArgumentException{
         if (this.email.endsWith("@social.aston-ecole.com") == false )
-            throw  new  IllegalArgumentException("Invalid Email ");
+            throw  new  IllegalArgumentException("Invalid Email: you have to  be Aston Student ");
+        this.email =  this.email.toLowerCase();
     }
 
 
