@@ -20,29 +20,25 @@ public class SecurityConfig {
 
 
     @Bean
-    public InMemoryUserDetailsManager  user(){
-
-        return new InMemoryUserDetailsManager(
-             User.withUsername("halim")
-                     .password("{noop}yahiaoui")
-                     .authorities("read")
-                     .build()
-        ) ;
-    }
-
-    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-          return  http.
-                   authorizeRequests()
-                      .antMatchers("/private").authenticated()
-                      .anyRequest().permitAll()
-                  .and()
-                     .formLogin()
-                  .and()
-                    .build();
+        return http.
+                authorizeRequests()
+                .antMatchers("/private").authenticated()
+                .anyRequest().permitAll()
+                .and()
+                .httpBasic()
+                .and()
+              //  .oauth2Login()
+               //    .and()
+                .build();
     }
-
+    @Bean
+    public  UserDetailsService userDetailsService (){
+        return  new InMemoryUserDetailsManager(
+                 User.withUsername("user" ).password("password").roles("ADMIN").build()
+        );
+    }
 
 
 }
