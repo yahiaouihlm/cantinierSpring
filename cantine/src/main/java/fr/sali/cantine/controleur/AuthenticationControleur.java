@@ -1,6 +1,7 @@
 package fr.sali.cantine.controleur;
 
 
+import fr.sali.cantine.dto.in.LoginDto;
 import fr.sali.cantine.dto.in.UserDto;
 import fr.sali.cantine.service.AuthentificationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +15,9 @@ public class AuthenticationControleur {
     AuthentificationService authservice;
 
     @PostMapping("/login")
-     public String  authentication  ( @RequestBody UserDto userinfo){
+     public String  authentication  ( @RequestBody LoginDto userinfo){
          try{
-             authservice.authentification(userinfo) ;
+             authservice.authentification( userinfo) ;
          }catch( Exception e){
              return e.getMessage();
          }

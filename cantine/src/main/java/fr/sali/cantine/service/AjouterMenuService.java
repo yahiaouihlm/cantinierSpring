@@ -21,8 +21,9 @@ public class AjouterMenuService {
        IMenuDao   menuDao ;
 
       public MenuEntity ajouterMenu  (MenuDto menuDto) throws IllegalArgumentException, IOException {
-             MenuEntity menu =  menuDto.toMenuEntity();
+           /** Il faut Récupérer le ID du  plat que il  faut ajouter  et  faire la relation */
 
+           MenuEntity menu =  menuDto.toMenuEntity();
 
              /**************** les IMAGES mENU *******************/
           File image =  new File("src/main/resources/plat.png");

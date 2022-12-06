@@ -18,8 +18,5 @@ public class CantineApplication {
 	}
 
 
-	@Bean
-	public BCryptPasswordEncoder passwordEncoded(){
-		return  new BCryptPasswordEncoder(BCryptPasswordEncoder.BCryptVersion.$2A);
-	}
+
 }

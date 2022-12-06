@@ -14,7 +14,7 @@ class InscriptionServiceTest {
     private InscriptionService service ;
 
     @Test
-    public   void TestInscription () throws  Exception {
+    public   void   TestInscription () throws  Exception {
         UserDto userdto =  new UserDto();
         userdto.setBirthday(LocalDate.of( 2000,07 , 18));
         userdto.setEmail("yahiaouihalim@social.aston-ecole.com");

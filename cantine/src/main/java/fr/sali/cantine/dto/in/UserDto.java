@@ -38,6 +38,7 @@ public class UserDto {
     private String username;
 
 
+    @JsonIgnore
     private List<CommandeEntity> commandes;
 
 
