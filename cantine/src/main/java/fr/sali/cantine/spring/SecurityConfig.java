@@ -24,25 +24,23 @@ import java.util.Collections;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig extends   AbstractSpringSecurityConfiguration {
-    @Override
+public class SecurityConfig {
+    /*@Override
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
             throws Exception {
         return super.authenticationManager(authenticationConfiguration);
-    }
+    }*/
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http ,  AuthenticationManager authenticationManager) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         return http.
                 authorizeRequests()
                 .antMatchers("/login").authenticated()
                 .anyRequest().permitAll()
                 .and()
-                .formLogin().and()
-                .addFilterBefore(new AuthentificationFilter (authenticationManager, this.env),
-                UsernamePasswordAuthenticationFilter.class)
-
+                .formLogin() .and()
+             //   .addFilterBefore(new AuthentificationFilter (authenticationManager, this.env), UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
     @Bean
