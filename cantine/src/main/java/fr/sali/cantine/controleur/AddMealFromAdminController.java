@@ -1,9 +1,8 @@
 package fr.sali.cantine.controleur;
 
 
-import ch.qos.logback.core.net.SyslogOutputStream;
 import fr.sali.cantine.dto.in.PlatDto;
-import fr.sali.cantine.service.AjouterPlatService;
+import fr.sali.cantine.service.AddMealFromAdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,10 +10,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/catine/admin/Ajouter")
-public class AjouterPlatControleur {
+public class AddMealFromAdminController {
 
     @Autowired
-   private AjouterPlatService servicePlat ;
+   private AddMealFromAdminService servicePlat ;
 
    @PostMapping("/Plat")
    public  String  ajouterPlay (PlatDto plat){

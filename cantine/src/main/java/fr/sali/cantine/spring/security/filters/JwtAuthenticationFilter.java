@@ -3,7 +3,6 @@ package fr.sali.cantine.spring.security.filters;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.sali.cantine.dto.in.LoginDto;
-import fr.sali.cantine.dto.in.RolesDto;
 import fr.sali.cantine.dto.in.UserDtailsDto;
 import fr.sali.cantine.dto.out.UserDtout;
 import fr.sali.cantine.entity.RoleEntity;
@@ -22,22 +21,19 @@ import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.util.ObjectUtils;
 
 import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class AuthentificationFilter  extends UsernamePasswordAuthenticationFilter  implements  SecurityConstants{
+public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter  implements  SecurityConstants{
 
     private static final Logger LOG = LogManager.getLogger();
     private final AuthenticationManager authenticationManager;
@@ -46,7 +42,7 @@ public class AuthentificationFilter  extends UsernamePasswordAuthenticationFilte
     @Autowired
     AuthentificationService authenticationSerivce;
 
-    public AuthentificationFilter (AuthenticationManager pAuthenticationManager, Environment pEnv) {
+    public JwtAuthenticationFilter(AuthenticationManager pAuthenticationManager, Environment pEnv) {
         this.authenticationManager = pAuthenticationManager;
         this.setFilterProcessesUrl(SecurityConstants.AUTH_LOGIN_URL);
        // this.setAuthenticationFailureHandler(new StoneAuthenticationFailureHandler());
@@ -62,7 +58,6 @@ public class AuthentificationFilter  extends UsernamePasswordAuthenticationFilte
         var username = request.getParameter("email");
         var password = request.getParameter("password");
 
-        //  si Les paramettre sont dans  Le Body
         LoginDto loginDtoIn = null;
         if (ObjectUtils.isEmpty(username) || ObjectUtils.isEmpty(password)) {
             LOG.debug("--> JwtAuthenticationFilter.attemptAuthentication(email, password) as Json in Body");

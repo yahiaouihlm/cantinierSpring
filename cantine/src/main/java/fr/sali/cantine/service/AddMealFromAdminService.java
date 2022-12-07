@@ -12,7 +12,7 @@ import java.io.File;
 import java.io.FileInputStream;
 
 @Service
-public class AjouterPlatService {
+public class AddMealFromAdminService {
 
     @Autowired
     private IPlatDao  platDao ;

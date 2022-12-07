@@ -33,7 +33,11 @@ public class MenuDto {
 
     private List<QuantiteEntity> quantites;
 
+    /**
+     *  la variable id_plat sert chercher le plat que  on  veut ajouter à  la listes des menus
+     */
 
+   private Integer  id_plat ;
     /**
      * @doc La méthode vérifié la nullable des paramétreS,  construit Le Menu entité
      * @return  Le MenuEntity (Menu)

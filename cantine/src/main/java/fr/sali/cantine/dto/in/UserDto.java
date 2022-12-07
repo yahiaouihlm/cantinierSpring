@@ -7,6 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -95,6 +96,26 @@ public class UserDto {
      }
 
 
+    /**
+     * @doc  vérifier la valider des information  de utilisateur saisi pour faire un update de profile
+     * @throws IllegalArgumentException :  si  l'un des arguments (name, familyname ,  phone )  est invalid
+     */
+    @JsonIgnore
+     public   void checkNewUserInformation () throws  IllegalArgumentException{
+        if (this.username == null  || this.userfname == null  ||  this.birthday == null ){
+            LOG.debug("username = { }   userfnmae =  { } or  birthday = { }  is  null  ",  this.username ,  this.userfname ,  this.birthday);
+               throw  new IllegalArgumentException("Invalid user Informations NO null Infomation accepted  ");
+
+        }
+
+        if (this.userfname.trim().length() < 4 || this.username.trim().length() < 4  ) {
+                 throw  new IllegalArgumentException("Invalid user Inofrmation  Lenght ");
+         }
+
+        if (this.phone != null )
+            phoneValidator();
+
+     }
 
 
     /**
