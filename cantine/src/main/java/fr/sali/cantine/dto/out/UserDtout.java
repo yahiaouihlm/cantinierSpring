@@ -1,7 +1,7 @@
 package fr.sali.cantine.dto.out;
 
-import fr.sali.cantine.dto.in.UserDto;
-import fr.sali.cantine.entity.CommandeEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import fr.sali.cantine.entity.OrderEntity;
 import fr.sali.cantine.entity.UserEntity;
 
 import java.math.BigDecimal;
@@ -19,12 +19,12 @@ public class UserDtout {
     private String phone;
     private String userfname;
     private String username;
-    private List<CommandeEntity> commandes;
+    private List<OrderDtout> commandes;
 
     public UserDtout (){}
 
     public  UserDtout (UserEntity user){
-       this.commandes =  user.getCommandes();
+   //    this.commandes =  user.getCommandes();
        this.email  =  user.getEmail();
        this.phone  =  user.getPhone() ;
        this.userfname =  user.getUserfname() ;
@@ -35,6 +35,7 @@ public class UserDtout {
      *
      * @param pMap where to take information
      */
+    @JsonIgnore
     public UserDtout(Map<String, ?> pMap) {
         super();
         if (pMap.get("id") != null) {
@@ -53,6 +54,7 @@ public class UserDtout {
             this.setCredit(BigDecimal.valueOf(0D));
         }
     }
+
 
 
 
@@ -108,11 +110,11 @@ public class UserDtout {
         this.username = username;
     }
 
-    public List<CommandeEntity> getCommandes() {
+    public List<OrderDtout> getCommandes() {
         return commandes;
     }
 
-    public void setCommandes(List<CommandeEntity> commandes) {
+    public void setCommandes(List<OrderDtout> commandes) {
         this.commandes = commandes;
     }
 }

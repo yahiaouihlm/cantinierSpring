@@ -1,7 +1,6 @@
 package fr.sali.cantine.dto.in;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import fr.sali.cantine.entity.CommandeEntity;
 import fr.sali.cantine.entity.UserEntity;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,34 +13,18 @@ import java.util.regex.Pattern;
 
 public class UserDto {
     private static final Logger LOG = LogManager.getLogger();
-
     private Integer id;
-
     private LocalDate birthday;
-
     private LocalDate creationDate;
     private BigDecimal credit;
-
     private String email;
-
-
     private String password;
-
-
     private String phone;
-
     private Integer status;
-
-
     private String userfname;
-
-
     private String username;
-
-
     @JsonIgnore
-    private List<CommandeEntity> commandes;
-
+    private List<OrderDto> commandes;
 
     /**
      * @doc  la méthode permet de vérifié si la "syntaxe" du  numéro téléphone française  est  valide en  la matchant  avec une regex
@@ -49,7 +32,6 @@ public class UserDto {
      */
     @JsonIgnore
     public void phoneValidator ()throws  IllegalArgumentException{
-
            if (this.phone == null)
                    throw  new IllegalArgumentException("Invalid Password ") ;
 
@@ -61,8 +43,6 @@ public class UserDto {
           }
 
     }
-
-
     /**
      * @doc  La méthode check si  les argument de login (email ,  password ) ,  que email termine avec @social.aston-ecole.com
      * @throws IllegalArgumentException si  email ou  password  sont null  ou  leur taille  est inférieur < 4  ou email  termine pas avec @social.aston-ecole.cpm
@@ -239,11 +219,11 @@ public class UserDto {
         this.username = username;
     }
 
-    public List<CommandeEntity> getCommandes() {
+    public List<OrderDto> getCommandes() {
         return commandes;
     }
 
-    public void setCommandes(List<CommandeEntity> commandes) {
+    public void setCommandes(List<OrderDto> commandes) {
         this.commandes = commandes;
     }
 }

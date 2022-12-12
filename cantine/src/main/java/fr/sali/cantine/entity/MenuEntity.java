@@ -46,16 +46,16 @@ public class MenuEntity implements Serializable {
 			@JoinColumn(name="commande_idcommande", nullable=false)
 			}
 		)
-	private List<CommandeEntity> commandes;
+	private List<OrderEntity> commandes;
 
 	//bi-directional many-to-one association to ImageEntity
-	@ManyToOne
+	@ManyToOne( cascade = CascadeType.ALL)
 	@JoinColumn(name="image_idimage", nullable=false)
 	private ImageEntity image;
 
 	//bi-directional many-to-many association to PlatEntity
 	@ManyToMany(mappedBy="menus")
-	private List<PlatEntity> plats;
+	private List<MealEntity> plats;
 
 	//bi-directional many-to-one association to QuantiteEntity
 	@OneToMany(mappedBy="menu")
@@ -112,11 +112,11 @@ public class MenuEntity implements Serializable {
 		this.status = status;
 	}
 
-	public List<CommandeEntity> getCommandes() {
+	public List<OrderEntity> getCommandes() {
 		return this.commandes;
 	}
 
-	public void setCommandes(List<CommandeEntity> commandes) {
+	public void setCommandes(List<OrderEntity> commandes) {
 		this.commandes = commandes;
 	}
 
@@ -128,11 +128,11 @@ public class MenuEntity implements Serializable {
 		this.image = image;
 	}
 
-	public List<PlatEntity> getPlats() {
+	public List<MealEntity> getPlats() {
 		return this.plats;
 	}
 
-	public void setPlats(List<PlatEntity> plats) {
+	public void setPlats(List<MealEntity> plats) {
 		this.plats = plats;
 	}
 

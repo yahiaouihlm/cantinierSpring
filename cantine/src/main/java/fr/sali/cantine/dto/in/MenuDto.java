@@ -3,7 +3,6 @@ package fr.sali.cantine.dto.in;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import fr.sali.cantine.entity.*;
 
-import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -23,21 +22,23 @@ public class MenuDto {
     private Integer status;
 
 
-    private List<CommandeEntity> commandes;
+    private List<OrderEntity> commandes;
 
 
     private ImageEntity image;
 
 
-    private List<PlatEntity> plats;
+    //  Pas  Besoin de recevoire toute un plat il  faut enregister  dans  la base tout d'abord
+   // private List<MealEntity> plats;
 
     private List<QuantiteEntity> quantites;
+
+
 
     /**
      *  la variable id_plat sert chercher le plat que  on  veut ajouter à  la listes des menus
      */
-
-   private Integer  id_plat ;
+   private List <Integer> mealsIS;
     /**
      * @doc La méthode vérifié la nullable des paramétreS,  construit Le Menu entité
      * @return  Le MenuEntity (Menu)
@@ -47,7 +48,7 @@ public class MenuDto {
 
     @JsonIgnore
     public MenuEntity toMenuEntity () throws  IllegalArgumentException {
-        if (this.description == null || this.label ==null || this.prixht == null || this.status ==null || this.plats == null)
+        if (this.description == null || this.label ==null || this.prixht == null || this.status ==null )
             throw new IllegalArgumentException("Invalid Argument  No  Null  Argument accepted ") ;
         MenuEntity   menu =  new MenuEntity() ;
         menu.setStatus(this.status);
@@ -55,7 +56,7 @@ public class MenuDto {
         menu.setDescription(this.description);
         menu.setJourassocier(new Date().toString());
         menu.setPrixht(this.prixht);
-        menu.setPlats(this.plats);
+      //  menu.setPlats(this.plats);
         // Les images
 
         return  menu;
@@ -113,11 +114,11 @@ public class MenuDto {
         this.status = status;
     }
 
-    public List<CommandeEntity> getCommandes() {
+    public List<OrderEntity> getCommandes() {
         return commandes;
     }
 
-    public void setCommandes(List<CommandeEntity> commandes) {
+    public void setCommandes(List<OrderEntity> commandes) {
         this.commandes = commandes;
     }
 
@@ -129,13 +130,13 @@ public class MenuDto {
         this.image = image;
     }
 
-    public List<PlatEntity> getPlats() {
+  /*  public List<MealEntity> getPlats() {
         return plats;
     }
 
-    public void setPlats(List<PlatEntity> plats) {
+    public void setPlats(List<MealEntity> plats) {
         this.plats = plats;
-    }
+    }*/
 
     public List<QuantiteEntity> getQuantites() {
         return quantites;
@@ -144,4 +145,13 @@ public class MenuDto {
     public void setQuantites(List<QuantiteEntity> quantites) {
         this.quantites = quantites;
     }
+
+    public List <Integer> getMealsIS() {
+        return mealsIS;
+    }
+
+    public void setMealsIS (List <Integer> mealsIS) {
+        this.mealsIS = mealsIS;
+    }
+
 }

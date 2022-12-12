@@ -48,11 +48,9 @@ public class JwtAuthorization extends BasicAuthenticationFilter implements Secur
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
-
         final var url = request.getRequestURL().toString();
        //  recupération du  Token
         var jwtToken = request.getHeader(SecurityConstants.TOKEN_HEADER);
-
         LOG.trace("<-- JwtAuthorizationFilter.doFilterInternal - {} - JWT token is {}", url,
                 jwtToken);
 
@@ -66,16 +64,10 @@ public class JwtAuthorization extends BasicAuthenticationFilter implements Secur
             SecurityContextHolder.getContext().setAuthentication(authentication);
             LOG.debug("<-- JwtAuthorizationFilter.doFilterInternal - {} - OK - Set authentication back", url);
         }
-
         filterChain.doFilter(request, response);
-
     }
-
-
-
     private  boolean validateToken (String  token){
          LOG.trace("--> JwtAuthorizationFilter.validateToken - Token - {}", token);
-
          try {
              Jwts.parserBuilder().setSigningKey(this.signingKey).build()
                      .parseClaimsJws(token.replace(SecurityConstants.TOKEN_PREFIX, ""));
@@ -84,7 +76,6 @@ public class JwtAuthorization extends BasicAuthenticationFilter implements Secur
          }catch (  Exception e){
              LOG.error("--> JwtAuthorizationFilter.validateToken - Token is KO", e);
          }
-
          return  false ;
     }
 

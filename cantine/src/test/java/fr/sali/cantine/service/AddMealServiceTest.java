@@ -1,6 +1,7 @@
 package fr.sali.cantine.service;
 
-import fr.sali.cantine.dto.in.PlatDto;
+import fr.sali.cantine.dto.in.MealtDto;
+import fr.sali.cantine.service.admin.MealService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -9,23 +10,24 @@ import java.math.BigDecimal;
 
 
 @SpringBootTest
-class AjouterPlatServiceTest {
+class AddMealServiceTest {
 
     @Autowired
-    private AddMealFromAdminService service;
+    private MealService service;
 
     @Test
-    public void ajouterPlatTest () {
+    public void addMealTest () {
 
-        PlatDto platDto =  new PlatDto ();
+        MealtDto platDto =  new MealtDto();
         platDto.setCategorie("Boisson");
         platDto.setDescription("Une boisson   sucré ");
         platDto.setLabel("Coucacola");
         platDto.setStatus(1) ;
         BigDecimal prix =  new BigDecimal(3.1) ;
         platDto.setPrixht(prix);
+        platDto.setQuantite(4);
         try{
-            service.ajouetPlat(platDto);
+            service.addMeal(platDto);
         }catch ( Exception e){
             System.out.println(e);
             System.exit(1);

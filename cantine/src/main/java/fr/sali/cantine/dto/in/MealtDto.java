@@ -3,11 +3,10 @@ package fr.sali.cantine.dto.in;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import fr.sali.cantine.entity.*;
 
-import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
 
-public class PlatDto {
+public class MealtDto {
 
     private String categorie;
 
@@ -21,7 +20,7 @@ public class PlatDto {
     private BigDecimal prixht;
 
 
-    private String quantite;
+    private Integer quantite;
 
     private Integer status;
 
@@ -31,7 +30,7 @@ public class PlatDto {
     private ImageEntity image;
 
 
-    private List<CommandeEntity> commandes;
+    private List<OrderEntity> commandes;
 
 
     private List<QuantiteEntity> quantites;
@@ -43,16 +42,19 @@ public class PlatDto {
      */
 
     @JsonIgnore
-    public PlatEntity toPlat () throws  IllegalArgumentException {
-        if (this.categorie == null || this.label == null || this.description == null || this.prixht == null || this.status ==null )
+    public MealEntity toPlat () throws  IllegalArgumentException {
+        if (this.categorie == null || this.label == null || this.description == null || this.prixht == null || this.status ==null  || this.quantite == null)
              throw new IllegalArgumentException("Invalide Argument No Null  Argument Accepted ") ;
+        if (this.quantite < 0 )
+            throw new IllegalArgumentException("Invalide Quantity Argument (it must  be an  Intger bigger that  0 )") ;
 
-        PlatEntity plat =  new PlatEntity();
+        MealEntity plat =  new MealEntity();
         plat.setLabel(this.label);
         plat.setCategorie(this.categorie);
         plat.setPrixht(this.prixht);
         plat.setStatus(this.status);
         plat.setDescription(this.description);
+        plat.setQuantite(this.quantite);
 
         return  plat;
     }
@@ -100,11 +102,11 @@ public class PlatDto {
         this.prixht = prixht;
     }
 
-    public String getQuantite() {
+    public Integer getQuantite() {
         return quantite;
     }
 
-    public void setQuantite(String quantite) {
+    public void setQuantite(Integer quantite) {
         this.quantite = quantite;
     }
 
@@ -132,11 +134,11 @@ public class PlatDto {
         this.image = image;
     }
 
-    public List<CommandeEntity> getCommandes() {
+    public List<OrderEntity> getCommandes() {
         return commandes;
     }
 
-    public void setCommandes(List<CommandeEntity> commandes) {
+    public void setCommandes(List<OrderEntity> commandes) {
         this.commandes = commandes;
     }
 

@@ -52,20 +52,16 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         this.env = pEnv;
     }
 
-
     @Override
     public Authentication attemptAuthentication(HttpServletRequest  request, HttpServletResponse response) {
         var username = request.getParameter("email");
         var password = request.getParameter("password");
-
         LoginDto loginDtoIn = null;
         if (ObjectUtils.isEmpty(username) || ObjectUtils.isEmpty(password)) {
             LOG.debug("--> JwtAuthenticationFilter.attemptAuthentication(email, password) as Json in Body");
             String body = null;
             try {
-
                 body = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
-
                 var mapper = new ObjectMapper();
                 loginDtoIn = mapper.readValue(body, LoginDto.class);
                 username = loginDtoIn.getEmail();
@@ -74,13 +70,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             } catch (Exception exp) {
                 LOG.error("--> JwtAuthenticationFilter.attemptAuthentication - Error, your JSon is not right!, found {}, should be something like {\"email\":\"toto@gmail.com\",\"password\":\"bonjour\"}. DO NOT use simple quote!", body, exp);
             }
-
         } else {
             LOG.debug("--> JwtAuthenticationFilter.attemptAuthentication(email, password) as parameter");
         }
         LOG.debug("--> JwtAuthenticationFilter.attemptAuthentication({}, [PROTECTED])", username);
-
-      //
         var result = this.authenticationSerivce.authentification(loginDtoIn);
         if (result == null ) {
             try {
@@ -89,9 +82,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 throw new RuntimeException(e);
             }
         }
-
         Collection<GrantedAuthority> springSecurityRoles = new ArrayList<>(2);
-
         //pas besoin de username,  password   car ils  sont  passsé directement via l'objet authenticationToken
         UserDtailsDto userDtails  = new UserDtailsDto( result.getId(),result.getBirthday(), result.getEmail(), result.getUserfname() ,result.getRoles() );
         for (RoleEntity role   :  result.getRoles()) {
@@ -112,13 +103,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
      */
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain ,  Authentication authentication) {
-
          var  userName   = authentication.getName();
-
          //  confier  a  spring  les roles
         List<String> roles = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
-
         var ue = (UserDtout) authentication.getDetails();
         Claims claims = new DefaultClaims();
         claims.put(SecurityConstants.TOKEN_USER, ue);
@@ -126,18 +114,12 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         claims.setIssuer(SecurityConstants.TOKEN_ISSUER);
         claims.setAudience(SecurityConstants.TOKEN_AUDIENCE);
         claims.setSubject(userName);
-
-
         var val = Integer.parseInt(this.env.getProperty("configuration.jwt.expire.in.ms", "86400000"));
        // configurer le  time de expiration
         claims.setExpiration(new Date(System.currentTimeMillis() + val));
-
         var signatureAlgorithm = SignatureAlgorithm
                 .forName(this.env.getProperty("configuration.jwt.signature.algorithm", "none"));
-
         JwtBuilder builder;
-
-
         //pas  compris  ce qui  se passe ici  ducoup
         if (signatureAlgorithm == null || signatureAlgorithm == SignatureAlgorithm.NONE) {
             LOG.warn("- No encryption for JWT token, this is good for testing ...");
@@ -148,13 +130,9 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             var signingKey = this.env.getProperty("configuration.jwt.key", "-KaPdSgVkXp2s5v8y/B?E(H+MbQeThWmZq3t6w9z$C&F)J@NcRfUjXn2r5u7x!A%").getBytes();
             builder = Jwts.builder().signWith(Keys.hmacShaKeyFor(signingKey), signatureAlgorithm).setHeaderParam("typ", SecurityConstants.TOKEN_TYPE).setClaims(claims);
         }
-
-
         // Sonar does not like this line because it thinks there is no signwith
         var token = builder.compact(); // NOSONAR
         response.addHeader(SecurityConstants.TOKEN_HEADER, SecurityConstants.TOKEN_PREFIX + token);
-
-
     }
 
 

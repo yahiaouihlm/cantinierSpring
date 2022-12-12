@@ -33,7 +33,7 @@ public class QuantiteEntity implements Serializable {
 			@JoinColumn(name="commande_idcommande", nullable=false)
 			}
 		)
-	private List<CommandeEntity> commandes;
+	private List<OrderEntity> commandes;
 
 	//bi-directional many-to-one association to MenuEntity
 	@ManyToOne
@@ -43,7 +43,7 @@ public class QuantiteEntity implements Serializable {
 	//bi-directional many-to-one association to PlatEntity
 	@ManyToOne
 	@JoinColumn(name="plat_idplat")
-	private PlatEntity plat;
+	private MealEntity plat;
 
 	public QuantiteEntity() {
 	}
@@ -64,11 +64,11 @@ public class QuantiteEntity implements Serializable {
 		this.quantite = quantite;
 	}
 
-	public List<CommandeEntity> getCommandes() {
+	public List<OrderEntity> getCommandes() {
 		return this.commandes;
 	}
 
-	public void setCommandes(List<CommandeEntity> commandes) {
+	public void setCommandes(List<OrderEntity> commandes) {
 		this.commandes = commandes;
 	}
 
@@ -80,11 +80,11 @@ public class QuantiteEntity implements Serializable {
 		this.menu = menu;
 	}
 
-	public PlatEntity getPlat() {
+	public MealEntity getPlat() {
 		return this.plat;
 	}
 
-	public void setPlat(PlatEntity plat) {
+	public void setPlat(MealEntity plat) {
 		this.plat = plat;
 	}
 

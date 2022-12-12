@@ -26,7 +26,8 @@ CREATE TABLE IF NOT EXISTS users (
     creation_date DATE NULL DEFAULT NULL,
     credit DECIMAL(5,2)  DEFAULT 0 ,
     phone VARCHAR(16) NULL DEFAULT NULL,
-    status   INT DEFAULT 1                   /* le 1  veut dire que utilisateur existe encore  0 son  compte est desactivé */
+    status   INT DEFAULT 1 ,                  /* le 1  veut dire que utilisateur existe encore  0 son  compte est desactivé */
+    FOREIGN KEY (id) REFERENCES image (idimage)
     );
 
 

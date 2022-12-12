@@ -1,4 +1,4 @@
-package fr.sali.cantine.service;
+package fr.sali.cantine.service.user;
 
 
 import fr.sali.cantine.dao.IUserDao;

@@ -12,7 +12,7 @@ import java.util.List;
  */
 @Entity
 @Table(name="plat")
-public class PlatEntity implements Serializable {
+public class MealEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -33,7 +33,7 @@ public class PlatEntity implements Serializable {
 	private BigDecimal prixht;
 
 
-	private String quantite;
+	private Integer quantite;
 
 	@Column(nullable=false)
 	private Integer status;
@@ -67,13 +67,13 @@ public class PlatEntity implements Serializable {
 			@JoinColumn(name="commande_idcommande", nullable=false)
 			}
 		)
-	private List<CommandeEntity> commandes;
+	private List<OrderEntity> commandes;
 
 	//bi-directional many-to-one association to QuantiteEntity
 	@OneToMany(mappedBy="plat")
 	private List<QuantiteEntity> quantites;
 
-	public PlatEntity() {
+	public MealEntity() {
 	}
 
 	public Integer getIdplat() {
@@ -116,11 +116,11 @@ public class PlatEntity implements Serializable {
 		this.prixht = prixht;
 	}
 
-	public String getQuantite() {
+	public Integer getQuantite() {
 		return this.quantite;
 	}
 
-	public void setQuantite(String quantite) {
+	public void setQuantite(Integer quantite) {
 		this.quantite = quantite;
 	}
 
@@ -148,11 +148,11 @@ public class PlatEntity implements Serializable {
 		this.image = image;
 	}
 
-	public List<CommandeEntity> getCommandes() {
+	public List<OrderEntity> getCommandes() {
 		return this.commandes;
 	}
 
-	public void setCommandes(List<CommandeEntity> commandes) {
+	public void setCommandes(List<OrderEntity> commandes) {
 		this.commandes = commandes;
 	}
 

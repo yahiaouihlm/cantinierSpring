@@ -4,7 +4,6 @@ import java.io.Serializable;
 import javax.persistence.*;
 import java.sql.Time;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 
@@ -14,7 +13,7 @@ import java.util.List;
  */
 @Entity
 @Table(name="commande")
-public class CommandeEntity implements Serializable {
+public class OrderEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -46,11 +45,18 @@ public class CommandeEntity implements Serializable {
 
 	//bi-directional many-to-many association to PlatEntity
 	@ManyToMany(mappedBy="commandes")
-	private List<PlatEntity> plats;
+	private List<MealEntity> plats;
 
-	public CommandeEntity() {
+	public OrderEntity() {
 	}
 
+	public  void addMeal (MealEntity meal){
+		this.plats.add(meal);
+	}
+
+	public  void addMenu (MenuEntity menu){
+		this.menus.add(menu);
+	}
 	public Integer getIdcommande() {
 		return this.idcommande;
 	}
@@ -107,11 +113,11 @@ public class CommandeEntity implements Serializable {
 		this.quantites = quantites;
 	}
 
-	public List<PlatEntity> getPlats() {
+	public List<MealEntity> getPlats() {
 		return this.plats;
 	}
 
-	public void setPlats(List<PlatEntity> plats) {
+	public void setPlats(List<MealEntity> plats) {
 		this.plats = plats;
 	}
 

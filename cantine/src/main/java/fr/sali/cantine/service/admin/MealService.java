@@ -1,10 +1,10 @@
-package fr.sali.cantine.service;
+package fr.sali.cantine.service.admin;
 
 
-import fr.sali.cantine.dao.IPlatDao;
-import fr.sali.cantine.dto.in.PlatDto;
+import fr.sali.cantine.dao.IMealDao;
+import fr.sali.cantine.dto.in.MealtDto;
 import fr.sali.cantine.entity.ImageEntity;
-import fr.sali.cantine.entity.PlatEntity;
+import fr.sali.cantine.entity.MealEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,13 +12,13 @@ import java.io.File;
 import java.io.FileInputStream;
 
 @Service
-public class AddMealFromAdminService {
+public class MealService {
 
     @Autowired
-    private IPlatDao  platDao ;
-    public PlatEntity ajouetPlat (PlatDto platDto ) throws  Exception {
+    private IMealDao platDao ;
+    public MealEntity addMeal (MealtDto platDto ) throws  Exception {
 
-         PlatEntity  plat =  new PlatEntity() ;
+         MealEntity plat =  new MealEntity() ;
          plat = platDto.toPlat() ;
 
 
@@ -29,7 +29,6 @@ public class AddMealFromAdminService {
         imageEntity.setImage(fis.readAllBytes());
         fis.close();
         plat.setImage(imageEntity);
-
 
          return  platDao.save(plat);
     }
