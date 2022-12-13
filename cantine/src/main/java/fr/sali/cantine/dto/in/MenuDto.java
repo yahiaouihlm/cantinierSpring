@@ -28,7 +28,7 @@ public class MenuDto {
     private ImageEntity image;
 
 
-    //  Pas  Besoin de recevoire toute un plat il  faut enregister  dans  la base tout d'abord
+    // Pas  Besoin de recevoire toute un plat il  faut enregister  dans  la base tout d'abord
    // private List<MealEntity> plats;
 
     private List<QuantiteEntity> quantites;
@@ -36,9 +36,9 @@ public class MenuDto {
 
 
     /**
-     *  la variable id_plat sert chercher le plat que  on  veut ajouter à  la listes des menus
+     *  La list est utilisé  pour stocker les ids des plats qui  contient un Menu
      */
-   private List <Integer> mealsIS;
+   private List <Integer> mealsIDS;
     /**
      * @doc La méthode vérifié la nullable des paramétreS,  construit Le Menu entité
      * @return  Le MenuEntity (Menu)
@@ -147,11 +147,11 @@ public class MenuDto {
     }
 
     public List <Integer> getMealsIS() {
-        return mealsIS;
+        return mealsIDS;
     }
 
     public void setMealsIS (List <Integer> mealsIS) {
-        this.mealsIS = mealsIS;
+        this.mealsIDS = mealsIS;
     }
 
 }

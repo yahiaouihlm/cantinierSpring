@@ -42,7 +42,7 @@ public class MealtDto {
      */
 
     @JsonIgnore
-    public MealEntity toPlat () throws  IllegalArgumentException {
+    public MealEntity toMeal () throws  IllegalArgumentException {
         if (this.categorie == null || this.label == null || this.description == null || this.prixht == null || this.status ==null  || this.quantite == null)
              throw new IllegalArgumentException("Invalide Argument No Null  Argument Accepted ") ;
         if (this.quantite < 0 )

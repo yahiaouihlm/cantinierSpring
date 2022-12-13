@@ -69,6 +69,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 loginDtoIn.validate();
             } catch (Exception exp) {
                 LOG.error("--> JwtAuthenticationFilter.attemptAuthentication - Error, your JSon is not right!, found {}, should be something like {\"email\":\"toto@gmail.com\",\"password\":\"bonjour\"}. DO NOT use simple quote!", body, exp);
+
             }
         } else {
             LOG.debug("--> JwtAuthenticationFilter.attemptAuthentication(email, password) as parameter");

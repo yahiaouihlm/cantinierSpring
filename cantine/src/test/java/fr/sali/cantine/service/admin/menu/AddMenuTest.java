@@ -1,7 +1,9 @@
-package fr.sali.cantine.service;
+package fr.sali.cantine.service.admin.menu;
 
 import fr.sali.cantine.dto.in.MenuDto;
 import fr.sali.cantine.service.admin.MenuService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,9 +14,9 @@ import java.util.List ;
 
 
 @SpringBootTest
-class AddMenuServiceTest {
+class AddMenuTest {
 
-
+    private static final Logger LOG = LogManager.getLogger();
     @Autowired
     MenuService serviceaddMenu;
 
@@ -27,7 +29,7 @@ class AddMenuServiceTest {
         menuDto.setStatus(1);
         List <Integer> ids  =  new LinkedList<>() ;
         ids.add(3);
-
+        ids.add(2);
         menuDto.setMealsIS(ids);
 
         serviceaddMenu.addMenu(menuDto) ;

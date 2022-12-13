@@ -1,5 +1,8 @@
 package fr.sali.cantine.entity;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import java.io.Serializable;
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -54,9 +57,13 @@ public class MenuEntity implements Serializable {
 	private ImageEntity image;
 
 	//bi-directional many-to-many association to PlatEntity
-	@ManyToMany(mappedBy="menus")
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(
+			name=" menu_has_plat",
+			joinColumns={ @JoinColumn(name="menu_idmenu", nullable=false)},
+			inverseJoinColumns={@JoinColumn(name=" plat_idplat", nullable=false)}
+	)
 	private List<MealEntity> plats;
-
 	//bi-directional many-to-one association to QuantiteEntity
 	@OneToMany(mappedBy="menu")
 	private List<QuantiteEntity> quantites;

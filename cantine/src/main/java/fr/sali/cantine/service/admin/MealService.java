@@ -10,27 +10,66 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.math.BigDecimal;
 
 @Service
 public class MealService {
 
     @Autowired
-    private IMealDao platDao ;
-    public MealEntity addMeal (MealtDto platDto ) throws  Exception {
-
-         MealEntity plat =  new MealEntity() ;
-         plat = platDto.toPlat() ;
-
-
+    private IMealDao mealDao ;
+    public MealEntity addMeal (MealtDto mealDto ) throws  Exception {
+         MealEntity meal =  new MealEntity() ;
+        meal = mealDto.toMeal() ;
         /******************* Mettre l'image par défaut ********************************/
         File image =  new File("src/main/resources/plat.png");
         var fis = new FileInputStream(image);
         ImageEntity imageEntity =  new ImageEntity();
         imageEntity.setImage(fis.readAllBytes());
         fis.close();
-        plat.setImage(imageEntity);
+        meal.setImage(imageEntity);
 
-         return  platDao.save(plat);
+         return  mealDao.save(meal);
     }
+
+
+  public  MealEntity removeMeal  (Integer  idMeal) throws  Exception {
+        if (idMeal == null  || idMeal  < 0)
+               throw new  IllegalArgumentException(" Invalid Arguments");
+
+        var mealToRemove = mealDao.findById(idMeal);
+        if ( !mealToRemove.isPresent())
+                throw   new IllegalArgumentException(" Invalid Arguments ");
+        mealDao.deleteById(idMeal);
+
+        return mealToRemove.get() ;
+  }
+
+
+  public MealEntity UpdateMeal (MealtDto mealDto , Integer idMeal){
+      if (idMeal == null  || idMeal  < 0)
+          throw new  IllegalArgumentException(" Invalid Arguments");
+
+      var mealToUpdate = mealDao.findById(idMeal);
+
+      if ( !mealToUpdate.isPresent())
+          throw   new IllegalArgumentException(" Invalid Arguments ");
+
+
+      var mealtoupdate = mealToUpdate.get();
+
+      if (mealDto.getImage() != null)
+            mealtoupdate.setImage(mealDto.getImage());
+      if (mealDto.getCategorie() !=null)
+                mealtoupdate.setCategorie(mealDto.getCategorie());
+      if (mealDto.getDescription() != null)
+                 mealtoupdate.setDescription(mealDto.getDescription());
+      if (mealDto.getLabel()!=null)
+          mealtoupdate.setLabel(mealDto.getLabel());
+      if (mealDto.getLabel() !=null && mealDto.getPrixht().compareTo(BigDecimal.ZERO) >0)
+          mealtoupdate.setPrixht(mealDto.getPrixht());
+      if (mealDto.getQuantite() != null && mealDto.getQuantite()>0)
+            mealtoupdate.setQuantite(mealDto.getQuantite());
+      return  mealDao.save(mealtoupdate);
+  }
 
 }

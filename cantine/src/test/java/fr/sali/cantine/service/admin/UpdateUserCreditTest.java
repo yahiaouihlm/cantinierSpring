@@ -1,4 +1,4 @@
-package fr.sali.cantine.service.admin.setDataBase;
+package fr.sali.cantine.service.admin;
 
 import fr.sali.cantine.service.admin.UpdateUserCredit;
 import org.junit.jupiter.api.Test;
