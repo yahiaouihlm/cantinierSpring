@@ -1,5 +1,8 @@
 package fr.sali.cantine.entity;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import java.io.Serializable;
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -16,7 +19,7 @@ public class MenuEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(unique=true, nullable=false)
 	private Integer idmenu;
 
@@ -46,17 +49,21 @@ public class MenuEntity implements Serializable {
 			@JoinColumn(name="commande_idcommande", nullable=false)
 			}
 		)
-	private List<CommandeEntity> commandes;
+	private List<OrderEntity> commandes;
 
 	//bi-directional many-to-one association to ImageEntity
-	@ManyToOne
+	@ManyToOne( cascade = CascadeType.ALL)
 	@JoinColumn(name="image_idimage", nullable=false)
 	private ImageEntity image;
 
 	//bi-directional many-to-many association to PlatEntity
-	@ManyToMany(mappedBy="menus")
-	private List<PlatEntity> plats;
-
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(
+			name=" menu_has_plat",
+			joinColumns={ @JoinColumn(name="menu_idmenu", nullable=false)},
+			inverseJoinColumns={@JoinColumn(name=" plat_idplat", nullable=false)}
+	)
+	private List<MealEntity> plats;
 	//bi-directional many-to-one association to QuantiteEntity
 	@OneToMany(mappedBy="menu")
 	private List<QuantiteEntity> quantites;
@@ -112,11 +119,11 @@ public class MenuEntity implements Serializable {
 		this.status = status;
 	}
 
-	public List<CommandeEntity> getCommandes() {
+	public List<OrderEntity> getCommandes() {
 		return this.commandes;
 	}
 
-	public void setCommandes(List<CommandeEntity> commandes) {
+	public void setCommandes(List<OrderEntity> commandes) {
 		this.commandes = commandes;
 	}
 
@@ -128,11 +135,11 @@ public class MenuEntity implements Serializable {
 		this.image = image;
 	}
 
-	public List<PlatEntity> getPlats() {
+	public List<MealEntity> getPlats() {
 		return this.plats;
 	}
 
-	public void setPlats(List<PlatEntity> plats) {
+	public void setPlats(List<MealEntity> plats) {
 		this.plats = plats;
 	}
 

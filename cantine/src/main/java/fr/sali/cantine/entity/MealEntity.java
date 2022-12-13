@@ -2,6 +2,7 @@ package fr.sali.cantine.entity;
 
 import java.io.Serializable;
 import javax.persistence.*;
+
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -12,11 +13,11 @@ import java.util.List;
  */
 @Entity
 @Table(name="plat")
-public class PlatEntity implements Serializable {
+public class MealEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(unique=true, nullable=false)
 	private Integer idplat;
 
@@ -32,8 +33,8 @@ public class PlatEntity implements Serializable {
 	@Column(nullable=false, precision=5, scale=2)
 	private BigDecimal prixht;
 
-	@Column(nullable=false, length=45)
-	private String quantite;
+
+	private Integer quantite;
 
 	@Column(nullable=false)
 	private Integer status;
@@ -52,7 +53,7 @@ public class PlatEntity implements Serializable {
 	private List<MenuEntity> menus;
 
 	//bi-directional many-to-one association to ImageEntity
-	@ManyToOne
+	@ManyToOne(cascade =  CascadeType.ALL)
 	@JoinColumn(name="image_idimage", nullable=false)
 	private ImageEntity image;
 
@@ -67,13 +68,13 @@ public class PlatEntity implements Serializable {
 			@JoinColumn(name="commande_idcommande", nullable=false)
 			}
 		)
-	private List<CommandeEntity> commandes;
+	private List<OrderEntity> commandes;
 
 	//bi-directional many-to-one association to QuantiteEntity
 	@OneToMany(mappedBy="plat")
 	private List<QuantiteEntity> quantites;
 
-	public PlatEntity() {
+	public MealEntity() {
 	}
 
 	public Integer getIdplat() {
@@ -116,11 +117,11 @@ public class PlatEntity implements Serializable {
 		this.prixht = prixht;
 	}
 
-	public String getQuantite() {
+	public Integer getQuantite() {
 		return this.quantite;
 	}
 
-	public void setQuantite(String quantite) {
+	public void setQuantite(Integer quantite) {
 		this.quantite = quantite;
 	}
 
@@ -148,11 +149,11 @@ public class PlatEntity implements Serializable {
 		this.image = image;
 	}
 
-	public List<CommandeEntity> getCommandes() {
+	public List<OrderEntity> getCommandes() {
 		return this.commandes;
 	}
 
-	public void setCommandes(List<CommandeEntity> commandes) {
+	public void setCommandes(List<OrderEntity> commandes) {
 		this.commandes = commandes;
 	}
 

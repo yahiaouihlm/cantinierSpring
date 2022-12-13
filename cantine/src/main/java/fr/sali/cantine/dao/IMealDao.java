@@ -1,9 +1,9 @@
 package fr.sali.cantine.dao;
 
-import fr.sali.cantine.entity.MenuEntity;
+import fr.sali.cantine.entity.MealEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface IMenuDao extends JpaRepository<MenuEntity, Integer> {
+public interface IMealDao extends JpaRepository<MealEntity, Integer> {
 }

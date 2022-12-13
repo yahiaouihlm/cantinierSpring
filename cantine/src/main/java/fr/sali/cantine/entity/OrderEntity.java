@@ -11,17 +11,19 @@ import java.util.List;
  * 
  */
 @Entity
-@Table(name = "commande")
-public class CommandeEntity implements Serializable {
+
+@Table(name="commande")
+public class OrderEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(unique = true, nullable = false)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(unique=true, nullable=false)
 	private Integer idcommande;
 
-	@Temporal(TemporalType.DATE)
-	@Column(nullable = false)
+
+	@Column(nullable=false)
+
 	private LocalDate datecreation;
 
 	private Time heurecreation;
@@ -42,13 +44,22 @@ public class CommandeEntity implements Serializable {
 	@ManyToMany(mappedBy = "commandes")
 	private List<QuantiteEntity> quantites;
 
-	// bi-directional many-to-many association to PlatEntity
-	@ManyToMany(mappedBy = "commandes")
-	private List<PlatEntity> plats;
 
-	public CommandeEntity() {
+	//bi-directional many-to-many association to PlatEntity
+	@ManyToMany(mappedBy="commandes")
+	private List<MealEntity> plats;
+
+
+	public OrderEntity() {
 	}
 
+	public  void addMeal (MealEntity meal){
+		this.plats.add(meal);
+	}
+
+	public  void addMenu (MenuEntity menu){
+		this.menus.add(menu);
+	}
 	public Integer getIdcommande() {
 		return this.idcommande;
 	}
@@ -105,11 +116,11 @@ public class CommandeEntity implements Serializable {
 		this.quantites = quantites;
 	}
 
-	public List<PlatEntity> getPlats() {
+	public List<MealEntity> getPlats() {
 		return this.plats;
 	}
 
-	public void setPlats(List<PlatEntity> plats) {
+	public void setPlats(List<MealEntity> plats) {
 		this.plats = plats;
 	}
 

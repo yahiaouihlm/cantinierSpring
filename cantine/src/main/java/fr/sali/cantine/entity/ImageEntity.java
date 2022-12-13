@@ -15,7 +15,7 @@ public class ImageEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(unique=true, nullable=false)
 	private Integer idimage;
 
@@ -28,7 +28,7 @@ public class ImageEntity implements Serializable {
 
 	//bi-directional many-to-one association to PlatEntity
 	@OneToMany(mappedBy="image")
-	private List<PlatEntity> plats;
+	private List<MealEntity> plats;
 
 	//bi-directional many-to-one association to UserEntity
 	@OneToMany(mappedBy="image")
@@ -75,22 +75,22 @@ public class ImageEntity implements Serializable {
 		return menus;
 	}
 
-	public List<PlatEntity> getPlats() {
+	public List<MealEntity> getPlats() {
 		return this.plats;
 	}
 
-	public void setPlats(List<PlatEntity> plats) {
+	public void setPlats(List<MealEntity> plats) {
 		this.plats = plats;
 	}
 
-	public PlatEntity addPlat(PlatEntity plat) {
+	public MealEntity addPlat(MealEntity plat) {
 		getPlats().add(plat);
 		plat.setImage(this);
 
 		return plat;
 	}
 
-	public PlatEntity removePlat(PlatEntity plat) {
+	public MealEntity removePlat(MealEntity plat) {
 		getPlats().remove(plat);
 		plat.setImage(null);
 
