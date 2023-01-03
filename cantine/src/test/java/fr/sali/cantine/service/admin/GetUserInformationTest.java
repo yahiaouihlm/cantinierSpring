@@ -1,6 +1,5 @@
 package fr.sali.cantine.service.admin;
 
-import fr.sali.cantine.service.admin.GetUserInformation;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,7 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 class GetUserInformationTest {
 
      @Autowired
-     GetUserInformation getInfoService ;
+     UserServices getInfoService ;
 
     @Test
     void  getAdminInformationServiceTest () {

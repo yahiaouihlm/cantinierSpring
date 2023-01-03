@@ -11,40 +11,51 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 @Service
-public class InscriptionService {
+public class SignUpService {
     @Autowired
     private BCryptPasswordEncoder encoder;
     @Autowired
     private IUserDao    userDao ;
+
+
     /**
-     * @doc  La méthode créé un UserEntity crypte le mot de passe ,  met le role par defaut <h3>Client</h3> et l'image par défaut
-     * @param userdto DTO utilisateur qui encapsule les donnée envoyé par La vue
-     * @return  l'utilisateur stocké dans  la Base de donné
-     * @throws Exception de le méthode toEntity
+     * @doc the method creat an  userEntity ,  crypt the password ,  and make  user as  default role, with  making also a default user image
+     * @param  userdto DTO which  is  the  user information  sended  by  the client
+     * @return userEntity storiged in  The DB
+     * @throws 'toEntity' method  Exception
      */
+
     public UserEntity inscription(UserDto userdto,  String role)   throws  Exception{
         UserEntity   user =  userdto.toEntity();
         String password =  userdto.getPassword();
+
         /************** Cryptage du Mot de Passe ************************************/
         String  cryptedpassword = encoder.encode(password);
         user.setPassword(cryptedpassword);
+
         /************ Mettre le role <> Client par defaut à utilisateur</> ****************/
-        RoleEntity userRole =  new RoleEntity() ;
+
+         RoleEntity userRole =  new RoleEntity() ;
          userRole.setLibelle(role);
          userRole.setDescription("utilisateur client peut ajouter au panier ces commandes ");
-        List<RoleEntity> userRoles =  new LinkedList<>();
-        userRoles.add(userRole);
+         List<RoleEntity> userRoles =  new LinkedList<>();
+         userRoles.add(userRole);
          user.setRoles(userRoles);
-       /******************* Mettre l'image par défaut ********************************/
+         user.setStatus(1);
+         user.setCreationDate(LocalDate.now());
+
+         /******************* Mettre l'image par défaut ********************************/
          File image =  new File("src/main/resources/photoprofile.png");
          var fis = new FileInputStream(image);
          ImageEntity imageEntity =  new ImageEntity();
          imageEntity.setImage(fis.readAllBytes());
          fis.close();
          user.setImage(imageEntity);
+
          /* Test son  email   */
         return userDao.save(user);
     }

@@ -4,21 +4,41 @@ package fr.sali.cantine.service.admin;
 import fr.sali.cantine.dao.IUserDao;
 import fr.sali.cantine.dto.out.UserDtout;
 import fr.sali.cantine.entity.RoleEntity;
-import fr.sali.cantine.entity.UserEntity;
-import org.apache.juli.logging.Log;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.DeleteMapping;
 
 import java.util.List;
 
 @Service
-public class GetUserInformation {
+public class UserServices {
 
     @Autowired
     private IUserDao userDao ;
     private static final Logger LOG = LogManager.getLogger();
+
+
+
+    public Boolean  deleteUser  (Integer  id ){
+          if (id == null || id < 0) {
+              throw    new   IllegalArgumentException (" Invalid  User ID ") ;
+          }
+          var  user =  userDao.findById(id);
+          if (!user.isPresent()){
+              throw   new IllegalArgumentException(" The User Doest Not Exists  ! ");
+          }
+          userDao.delete(user.get());
+          return true ;
+    }
+
+
+
+
+
+
+
 
     /**
      * @doc   : Vérifier La validité  de Id et renvoyer le ID Admin correspondant

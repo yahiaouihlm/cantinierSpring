@@ -21,7 +21,7 @@ public class UserDto {
     private String password;
     private String phone;
     private Integer status;
-    private String userfname;
+    private String fullname;
     private String username;
     @JsonIgnore
     private List<OrderDto> commandes;
@@ -68,7 +68,7 @@ public class UserDto {
          validateUserNullableOrEmptyInformation ();
          validateLenghtUserInformation();
          validationUserEmail();
-        var  user = new UserEntity( this.username ,  this.userfname , this.email ,  this.birthday,  this.password);
+        var  user = new UserEntity( this.username ,  this.fullname , this.email ,  this.birthday,  this.password);
         if (this.phone != null )
             phoneValidator();
         user.setPhone(this.phone);
@@ -82,13 +82,13 @@ public class UserDto {
      */
     @JsonIgnore
      public   void checkNewUserInformation () throws  IllegalArgumentException{
-        if (this.username == null  || this.userfname == null  ||  this.birthday == null ){
-            LOG.debug("username = { }   userfnmae =  { } or  birthday = { }  is  null  ",  this.username ,  this.userfname ,  this.birthday);
+        if (this.username == null  || this.fullname == null  ||  this.birthday == null ){
+            LOG.debug("username = { }   userfnmae =  { } or  birthday = { }  is  null  ",  this.username ,  this.fullname ,  this.birthday);
                throw  new IllegalArgumentException("Invalid user Informations NO null Infomation accepted  ");
 
         }
 
-        if (this.userfname.trim().length() < 4 || this.username.trim().length() < 4  ) {
+        if (this.fullname.trim().length() < 4 || this.username.trim().length() < 4  ) {
                  throw  new IllegalArgumentException("Invalid user Inofrmation  Lenght ");
          }
 
@@ -116,7 +116,7 @@ public class UserDto {
      */
     @JsonIgnore
     public  void validateLenghtUserInformation()throws  IllegalArgumentException {
-        if (this.username.length() < 4 || this.userfname.length() < 4 ||  this.password.length() < 4 )
+        if (this.username.length() < 4 || this.fullname.length() < 4 ||  this.password.length() < 4 )
             throw new IllegalArgumentException("Invalide Lenght Arguments");
     }
 
@@ -128,10 +128,10 @@ public class UserDto {
      */
     @JsonIgnore
     public void  validateUserNullableOrEmptyInformation  () throws  IllegalArgumentException{
-        if (this.username == null  || this.userfname == null || this.email == null || this.password == null || this.birthday == null)
+        if (this.username == null  || this.fullname == null || this.email == null || this.password == null || this.birthday == null)
             throw  new  IllegalArgumentException("Ivalid Argument") ;
 
-        if (this.username.trim().isEmpty() ||  this.userfname .trim().isEmpty() || this.email .trim().isEmpty() || this.password.trim().isEmpty())
+        if (this.username.trim().isEmpty() ||  this.fullname .trim().isEmpty() || this.email .trim().isEmpty() || this.password.trim().isEmpty())
             throw  new IllegalArgumentException("Ivalid Argument");
     }
 
@@ -204,11 +204,11 @@ public class UserDto {
     }
 
     public String getUserfname() {
-        return userfname;
+        return fullname;
     }
 
     public void setUserfname(String userfname) {
-        this.userfname = userfname;
+        this.fullname = userfname;
     }
 
     public String getUsername() {

@@ -11,7 +11,7 @@ import java.time.LocalDate;
 class InscriptionServiceTest {
 
     @Autowired
-    private InscriptionService service ;
+    private SignUpService service ;
 
     @Test
     public   void   TestInscription () throws  Exception {
