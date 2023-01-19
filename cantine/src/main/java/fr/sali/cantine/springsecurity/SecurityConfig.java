@@ -1,23 +1,32 @@
 package fr.sali.cantine.springsecurity;
 
-
 import fr.sali.cantine.springsecurity.jwt.JwtTokenVerifier;
 import fr.sali.cantine.springsecurity.jwt.JwtUsernameAndPasswordAuthenticationFilter;
 import fr.sali.cantine.springsecurity.springsecurityuser.CantineUserDailsService;
-import fr.sali.cantine.springsecurity.springsecurityuser.CantineUserDetails;
+import jdk.jfr.ContentType;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.access.method.P;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+
+import java.net.http.HttpRequest;
+import java.util.Arrays;
 
 @Configuration
+@EnableWebSecurity
 public class SecurityConfig {
 
     private JwtTokenVerifier jwtTokenVerifier;
@@ -32,12 +41,14 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain (HttpSecurity http) throws Exception {
 
      return  http.csrf(csrf->csrf.disable())
+             .cors(Customizer.withDefaults())
              .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
              .authorizeRequests(
                      authorized->{
                          authorized.antMatchers("/cantine/user/signUP").permitAll();
+                         authorized.antMatchers("/cantine/user/existemail").permitAll();
+                         authorized.antMatchers("/cantine/meals").permitAll();
                          authorized.anyRequest().authenticated();
-
                      }
              )
              .authenticationProvider(authenticationProvider())
@@ -46,7 +57,16 @@ public class SecurityConfig {
              .build();
    }
 
-
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
+        configuration.setAllowedMethods(Arrays.asList("GET","POST"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization" , "Content-Type"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
    @Bean
    public AuthenticationManager authenticationManager (){
         return new ProviderManager(authenticationProvider());

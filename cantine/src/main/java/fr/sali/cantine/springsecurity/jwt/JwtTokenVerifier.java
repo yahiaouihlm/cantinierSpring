@@ -48,7 +48,9 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
                         authorities.add(new SimpleGrantedAuthority(role));
                     });
                     UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(username, null, authorities);
+                   authentication.setDetails( authorities );
                     SecurityContextHolder.getContext().setAuthentication(authentication);
+
                     filterChain.doFilter(request, response);
                 }catch ( Exception e){
                     response.addHeader("error",  e.getMessage());

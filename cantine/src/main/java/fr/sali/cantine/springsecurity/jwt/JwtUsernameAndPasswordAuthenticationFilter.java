@@ -6,20 +6,26 @@ import fr.sali.cantine.dto.in.LoginDto;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import com.auth0.jwt.algorithms.Algorithm;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.util.ObjectUtils;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class JwtUsernameAndPasswordAuthenticationFilter  extends UsernamePasswordAuthenticationFilter {
@@ -58,10 +64,25 @@ public class JwtUsernameAndPasswordAuthenticationFilter  extends UsernamePasswor
         JwtUsernameAndPasswordAuthenticationFilter.LOG.debug("--> JwtAuthenticationFilter.attemptAuthentication({}, [PROTECTED])",
                 username);
 
-        Authentication  authentication =  new UsernamePasswordAuthenticationToken(username , passsword );
-        var  result  =  this.authenticationManager.authenticate(authentication) ;
-        System.out.println( "username   =  " + username   +  "password   =  " + passsword  +  "  authentication  " +  result.getPrincipal()   + "  <  " + result.getCredentials()  );
-        return   result ;
+        try {
+            Authentication  authentication =  new UsernamePasswordAuthenticationToken(username , passsword );
+             ///
+
+            return this.authenticationManager.authenticate(authentication) ;
+        }catch (  Exception  e ){
+            Map<String, String> idToken = new HashMap<>();
+
+            response.setContentType("application/json");
+            idToken.put("status" , HttpStatus.FORBIDDEN.name() );
+            idToken.put("message" ,  "Authentication error");
+            try {
+                new ObjectMapper().writeValue(response.getOutputStream(), idToken);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
+
+        return null ;
     }
 
     @Override
@@ -70,27 +91,35 @@ public class JwtUsernameAndPasswordAuthenticationFilter  extends UsernamePasswor
         Algorithm algorithm =  Algorithm.HMAC256(key.getBytes());
 
         String jwtAccessToken  = JWT.create()
-                .withSubject(authResult.getName())
-                .withExpiresAt(new Date(System.currentTimeMillis() + 5 * 60 *1000))
+                .withSubject(authResult.getName())   //  600=> 60 (in first of application)
+                .withExpiresAt(new Date(System.currentTimeMillis() + 5 * 6000 *1000))
                 .withIssuer(request.getRequestURI().toString())
                 .withClaim("roles" , authResult.getAuthorities().stream().map(GrantedAuthority:: getAuthority).collect(Collectors.toList()))
                 .sign(algorithm);
 
 
-        String refreshToken  =  JWT .create()
+        var  context  =  SecurityContextHolder.getContext() ;
+        context.setAuthentication(authResult);
+        SecurityContextHolder.setContext(context);
+
+        /*String refreshToken  =  JWT .create()
                 .withSubject(authResult.getName())
                 .withExpiresAt(new Date(System.currentTimeMillis() + 15 * 60 * 1000))
                 .withIssuer(request.getRequestURL().toString())
-                .sign(algorithm);
+                .sign(algorithm);*/
+
+        var username = context.getAuthentication().getName();
+        var  role  =  context.getAuthentication().getAuthorities().toArray();
 
 
-
-        //response.addHeader("Authorization", "Bearer " + jwtAccessToken);
-         response.setHeader("Authorization",  "Bearer " + jwtAccessToken);
-        response.setStatus(200);
-
-
-        response.getWriter().println(" vous estes bien  authentifié  !!!! "+ authResult.getName()  );
+        Map<String, String> idToken = new HashMap<>();
+        idToken.put("Authorization", "Bearer " + jwtAccessToken);
+        response.setContentType("application/json");
+        idToken.put("status" , HttpStatus.OK.name());
+        idToken.put("message" ,  "you are authenticated");
+        idToken.put("user" , username);
+        idToken.put("role", role[0].toString());
+        new ObjectMapper().writeValue(response.getOutputStream(), idToken);
 
     }
 

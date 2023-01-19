@@ -61,4 +61,16 @@ public class SignUpService {
     }
 
 
+    public boolean existingUser (String email ) {
+        if (email == null || email.trim().length() < 22  || !email.endsWith("@social.aston-ecole.com"))
+            return  false ;
+        var  user  =  userDao.findByEmail(email);
+        if (user.isPresent()) {
+            return  true  ;
+        }
+
+        return  false ;
+    }
+
+
 }

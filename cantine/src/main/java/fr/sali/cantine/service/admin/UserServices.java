@@ -4,6 +4,7 @@ package fr.sali.cantine.service.admin;
 import fr.sali.cantine.dao.IUserDao;
 import fr.sali.cantine.dto.out.UserDtout;
 import fr.sali.cantine.entity.RoleEntity;
+import fr.sali.cantine.entity.UserEntity;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.DeleteMapping;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServices {
@@ -18,7 +20,6 @@ public class UserServices {
     @Autowired
     private IUserDao userDao ;
     private static final Logger LOG = LogManager.getLogger();
-
 
 
     public Boolean  deleteUser  (Integer  id ){

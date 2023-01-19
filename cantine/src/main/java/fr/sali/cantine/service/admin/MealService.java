@@ -3,6 +3,7 @@ package fr.sali.cantine.service.admin;
 
 import fr.sali.cantine.dao.IMealDao;
 import fr.sali.cantine.dto.in.MealtDto;
+import fr.sali.cantine.dto.out.MealDtout;
 import fr.sali.cantine.entity.ImageEntity;
 import fr.sali.cantine.entity.MealEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,10 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.FileInputStream;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MealService {
@@ -72,4 +77,13 @@ public class MealService {
       return  mealDao.save(mealtoupdate);
   }
 
+
+    public List<MealDtout> getmeals (){
+        List<MealEntity> meals =  this.mealDao.findAll();
+        List<MealDtout>mealDtouts = new ArrayList<>();
+        for ( MealEntity  meal : meals) {
+             mealDtouts.add(new MealDtout(meal));
+        }
+        return  mealDtouts  ;
+    }
 }

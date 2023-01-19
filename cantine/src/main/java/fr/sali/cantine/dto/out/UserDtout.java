@@ -18,7 +18,7 @@ public class UserDtout {
     private String phone;
     private String userfname;
     private String username;
-    private List<OrderDtout> commandes;
+   // private List<OrderDtout> commandes;
 
     public UserDtout (){}
 
@@ -28,6 +28,12 @@ public class UserDtout {
        this.phone  =  user.getPhone() ;
        this.userfname =  user.getUserfname() ;
        this.username =  user.getUsername() ;
+       this.birthday = user.getBirthday() ;
+       if   (null == user.getCredit() )
+          this.credit =  new BigDecimal(0) ;
+       else {
+            this.credit =  user.getCredit() ;
+        }
     }
     /**
      * Constructor of the object.
@@ -109,11 +115,11 @@ public class UserDtout {
         this.username = username;
     }
 
-    public List<OrderDtout> getCommandes() {
+  /*  public List<OrderDtout> getCommandes() {
         return commandes;
     }
 
     public void setCommandes(List<OrderDtout> commandes) {
         this.commandes = commandes;
-    }
+    }*/
 }

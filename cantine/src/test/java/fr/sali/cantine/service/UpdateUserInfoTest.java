@@ -1,7 +1,7 @@
 package fr.sali.cantine.service;
 
 import fr.sali.cantine.dto.in.UserDto;
-import fr.sali.cantine.service.user.UpdateUserInfo;
+import fr.sali.cantine.service.user.UserInfoService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @SpringBootTest
 class UpdateUserInfoTest {
     @Autowired
-    UpdateUserInfo updateUserInfoService ;
+    UserInfoService updateUserInfoService ;
     @Test
     void  updateUserInformationTest  () throws   Exception {
         UserDto userdto =  new UserDto();
