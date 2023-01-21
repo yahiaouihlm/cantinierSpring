@@ -23,17 +23,10 @@ public class MealService {
     @Autowired
     private IMealDao mealDao ;
     public MealEntity addMeal (MealtDto mealDto ) throws  Exception {
-         MealEntity meal =  new MealEntity() ;
+        MealEntity meal =  new MealEntity() ;
         meal = mealDto.toMeal() ;
-        /******************* Mettre l'image par défaut ********************************/
-        File image =  new File("src/main/resources/plat.png");
-        var fis = new FileInputStream(image);
-        ImageEntity imageEntity =  new ImageEntity();
-        imageEntity.setImage(fis.readAllBytes());
-        fis.close();
-        meal.setImage(imageEntity);
-
-         return  mealDao.save(meal);
+        meal.setStatus(1);
+        return  mealDao.save(meal);
     }
 
 
@@ -63,7 +56,7 @@ public class MealService {
       var mealtoupdate = mealToUpdate.get();
 
       if (mealDto.getImage() != null)
-            mealtoupdate.setImage(mealDto.getImage());
+            mealtoupdate.setImage(null);
       if (mealDto.getCategorie() !=null)
                 mealtoupdate.setCategorie(mealDto.getCategorie());
       if (mealDto.getDescription() != null)
@@ -80,6 +73,10 @@ public class MealService {
 
     public List<MealDtout> getmeals (){
         List<MealEntity> meals =  this.mealDao.findAll();
+        for ( MealEntity  meal :meals) {
+            System.out.println(meal.getImage()
+            );
+        }
         List<MealDtout>mealDtouts = new ArrayList<>();
         for ( MealEntity  meal : meals) {
              mealDtouts.add(new MealDtout(meal));

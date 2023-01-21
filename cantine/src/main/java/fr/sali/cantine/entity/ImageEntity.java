@@ -49,8 +49,8 @@ public class ImageEntity implements Serializable {
 		return this.image;
 	}
 
-	public void setImage(byte[] image) {
-		this.image = image;
+	public void setImage(String   pimage) {
+		this.image = pimage.getBytes();
 	}
 
 	public List<MenuEntity> getMenus() {

@@ -34,7 +34,7 @@ public class MenuService {
           File image =  new File("src/main/resources/plat.png");
           var fis = new FileInputStream(image);
           ImageEntity imageEntity =  new ImageEntity();
-          imageEntity.setImage(fis.readAllBytes());
+          imageEntity.setImage("hello");
           fis.close();
           menu.setImage(imageEntity);
           MenuService.LOG.info(" Je suis  avant  d'enregister le Menu ");

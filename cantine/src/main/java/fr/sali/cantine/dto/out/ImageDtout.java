@@ -5,11 +5,11 @@ import fr.sali.cantine.entity.ImageEntity;
 public class ImageDtout {
 
       private   Integer idimage ;
-      private byte[] image;
+      private String image;
 
       public ImageDtout (ImageEntity imageEntity){
           this.idimage  = imageEntity.getIdimage() ;
-          this.image   =  imageEntity.getImage() ;
+          this.image   =  new String  (imageEntity.getImage()) ;
       }
     public Integer getIdimage() {
         return idimage;
@@ -19,11 +19,11 @@ public class ImageDtout {
         this.idimage = idimage;
     }
 
-    public byte[] getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(byte[] image) {
+    public void setImage( String image) {
         this.image = image;
     }
 }

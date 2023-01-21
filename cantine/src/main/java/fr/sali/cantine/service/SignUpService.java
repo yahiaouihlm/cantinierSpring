@@ -49,11 +49,10 @@ public class SignUpService {
          user.setCreationDate(LocalDate.now());
 
          /******************* Mettre l'image par défaut ********************************/
-         File image =  new File("src/main/resources/photoprofile.png");
-         var fis = new FileInputStream(image);
+
          ImageEntity imageEntity =  new ImageEntity();
-         imageEntity.setImage(fis.readAllBytes());
-         fis.close();
+         imageEntity.setImage("hello"); // attention
+
          user.setImage(imageEntity);
 
          /* Test son  email   */

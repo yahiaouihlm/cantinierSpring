@@ -6,33 +6,15 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public class MealtDto {
-
     private String categorie;
-
-
     private String description;
-
-
     private String label;
-
-
     private BigDecimal prixht;
-
-
     private Integer quantite;
-
     private Integer status;
+    private  String  image;
 
 
-    private List<MenuEntity> menus;
-
-    private ImageEntity image;
-
-
-    private List<OrderEntity> commandes;
-
-
-    private List<QuantiteEntity> quantites;
 
     /**
      * @doc  :  Vérifier La nullable des attribues categorie , label , description , status, et le prix
@@ -42,18 +24,21 @@ public class MealtDto {
 
     @JsonIgnore
     public MealEntity toMeal () throws  IllegalArgumentException {
-        if (this.categorie == null || this.label == null || this.description == null || this.prixht == null || this.status ==null  || this.quantite == null)
+        if (this.categorie == null || this.label == null || this.description == null || this.prixht == null
+                || this.quantite == null  || this.image == null  )
              throw new IllegalArgumentException("Invalide Argument No Null  Argument Accepted ") ;
-        if (this.quantite < 0 )
+        if (this.quantite < 0  ||  ! (this.quantite instanceof  Integer)  || this.prixht.compareTo(BigDecimal.ZERO) < 0 )
             throw new IllegalArgumentException("Invalide Quantity Argument (it must  be an  Intger bigger that  0 )") ;
 
         MealEntity plat =  new MealEntity();
         plat.setLabel(this.label);
         plat.setCategorie(this.categorie);
         plat.setPrixht(this.prixht);
-        plat.setStatus(this.status);
         plat.setDescription(this.description);
         plat.setQuantite(this.quantite);
+        ImageEntity mealImgae =  new ImageEntity();
+        mealImgae.setImage(this.image);
+        plat.setImage(mealImgae);
 
         return  plat;
     }
@@ -117,35 +102,21 @@ public class MealtDto {
         this.status = status;
     }
 
-    public List<MenuEntity> getMenus() {
+   /* public List<MenuEntity> getMenus() {
         return menus;
-    }
+    }*/
 
-    public void setMenus(List<MenuEntity> menus) {
+    /*public void setMenus(List<MenuEntity> menus) {
         this.menus = menus;
-    }
+    }*/
 
-    public ImageEntity getImage() {
+    public String  getImage() {
         return image;
     }
 
-    public void setImage(ImageEntity image) {
-        this.image = image;
+    public void setImage(String image) {
+        this.image  = image;
     }
 
-    public List<OrderEntity> getCommandes() {
-        return commandes;
-    }
 
-    public void setCommandes(List<OrderEntity> commandes) {
-        this.commandes = commandes;
-    }
-
-    public List<QuantiteEntity> getQuantites() {
-        return quantites;
-    }
-
-    public void setQuantites(List<QuantiteEntity> quantites) {
-        this.quantites = quantites;
-    }
 }
