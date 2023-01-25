@@ -45,8 +45,9 @@ public class SecurityConfig {
              .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
              .authorizeRequests(
                      authorized->{
-                         authorized.antMatchers("/cantine/user/signUP").permitAll();
+                         authorized.antMatchers("/cantine/user/signUP", "/cantine/upload").permitAll();
                          authorized.antMatchers("/cantine/user/existemail").permitAll();
+                         authorized.antMatchers("/cantine/download/**").permitAll();
                          authorized.antMatchers("/cantine/meals").permitAll();
                          authorized.anyRequest().authenticated();
                      }

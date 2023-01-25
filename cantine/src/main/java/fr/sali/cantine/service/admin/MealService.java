@@ -73,10 +73,7 @@ public class MealService {
 
     public List<MealDtout> getmeals (){
         List<MealEntity> meals =  this.mealDao.findAll();
-        for ( MealEntity  meal :meals) {
-            System.out.println(meal.getImage()
-            );
-        }
+
         List<MealDtout>mealDtouts = new ArrayList<>();
         for ( MealEntity  meal : meals) {
              mealDtouts.add(new MealDtout(meal));
