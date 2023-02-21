@@ -39,25 +39,19 @@ public class Meals {
      private ImageServe imageServe ;
 
      @PostMapping(value = "/cantine/upload" )
-     public String uploadImage (@RequestParam("file") MultipartFile image ) throws Exception {
+     public  ResponseEntity<Object>uploadImage (@RequestParam("file") MultipartFile image ) {
+         /*TODO  : mettre le path dans  le fichier de configuration */
+
+         var  path    =  "images/meals";
+
+         try {
+             this.imageServe.uploadImage(image ,  path);
+            return  ResponseHandler.responseBuilder("upload successfully",  HttpStatus.OK, "success");
+         } catch (Exception e) {
+             return  ResponseHandler.responseBuilder("ERROR",  HttpStatus.OK, "ERROR");
+         }
 
 
-           var  name  = image.getOriginalFilename();
-
-           name = new Date().getTime() + name ;
-           var  path    =  "images/" + name  ;
-
-           File file  =  new File (path);
-           file.createNewFile();
-
-          image.transferTo(Path.of(file.getPath()));
-
-         System.out.println(image.getSize());
-          // return image.getName();
-
-
-
-           return  name;
      }
 
 
@@ -66,16 +60,22 @@ public class Meals {
 
      // pour renvoyer l'image  !
      @GetMapping(value = "/cantine/download/{image}")
-     public   ResponseEntity<InputStreamResource>  getImage ( @PathVariable(value="image") String image ) throws FileNotFoundException {
+     public   ResponseEntity<InputStreamResource>  getImage ( @PathVariable(value="image") String image ){
+         /*TODO  : mettre le path dans  le fichier de configuration */
+         var  path  = "images/meals";
+         try {
+             MediaType contentType =  image.substring(image.lastIndexOf('.')).equals(".png") ? MediaType.IMAGE_PNG : MediaType.IMAGE_JPEG;
+             InputStream input = this.imageServe.downloadImage(image , path );
+             return ResponseEntity.ok()
+                     .contentType(contentType)
+                     .body(new InputStreamResource(input));
+         } catch (Exception e) {
+             System.out.println(e.getMessage());
+             return  ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+         }
 
-        //  File  file  =  imageServe.uploadImage(image,"src/main/resources/images/meals");
-         MediaType contentType =  image.substring(image.lastIndexOf('.')).equals(".png") ? MediaType.IMAGE_PNG : MediaType.IMAGE_JPEG;
 
-         InputStream input =  new   FileInputStream("images/"+image);
 
-         return ResponseEntity.ok()
-                 .contentType(contentType)
-                 .body(new InputStreamResource(input));
 
 
      }
@@ -88,6 +88,7 @@ public class Meals {
     public ResponseEntity<Object> getmelas(){
         try{
             List<MealDtout> meals =  new ArrayList<>( this.service.getmeals()) ;
+
             return  ResponseHandler.responseBuilder("LIST", HttpStatus.OK , meals);
         }catch ( Exception e){
             return  ResponseHandler.responseBuilder("NOTLIST", HttpStatus.FORBIDDEN , null);
@@ -95,16 +96,41 @@ public class Meals {
     } //  end of class
 
 
-    @PostMapping ("/cantine/meals/add")
-    public ResponseEntity <Object> addmeal (@RequestBody MealtDto  meal){
+    @GetMapping (value = "cantine/meals/getOne/{id}")
+    public  ResponseEntity<Object> getMeal (@PathVariable("id") Integer id) {
+          try{
+              MealDtout mealByid = this.service.getMealByid(id);
+              System.out.println(mealByid);
+              return ResponseHandler.responseBuilder("FOUND", HttpStatus.OK , mealByid);
+          }catch ( Exception e) {
 
+              return ResponseHandler.responseBuilder("NOT FOUND", HttpStatus.OK , "ERROR");
+          }
+    }
+
+
+    @GetMapping (value = "cantine/meals/removeOne/{id}")
+    public  ResponseEntity <Object> removemeal (@PathVariable("id") Integer id  ){
+
+         try {
+             this.service.removeMeal(id);
+             return ResponseHandler.responseBuilder("DELETED", HttpStatus.OK , "SUCCESS");
+         }catch ( Exception e ) {
+             return ResponseHandler.responseBuilder("NOT DELETED", HttpStatus.OK , "ERROR");
+         }
+
+    }
+
+    @PostMapping (value = "/cantine/meals/add", consumes = MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity <Object> addmeal (@ModelAttribute MealtDto  meal){
+        System.out.println("je suis  la ");
         try {
             System.out.println(meal);
             service.addMeal(meal);
-            return  ResponseHandler.responseBuilder("NOTLIST", HttpStatus.OK ,new String("bien enregistrer"));
+            return  ResponseHandler.responseBuilder("NOTLIST", HttpStatus.OK , "bien enregistrer");
         } catch (Exception e) {
             System.out.println(e);
-            return  ResponseHandler.responseBuilder("NOTLIST", HttpStatus.OK ,new String("ERROR d'enregistrement"));
+            return  ResponseHandler.responseBuilder("NOTLIST", HttpStatus.OK , "ERROR d'enregistrement");
         }
 
     }

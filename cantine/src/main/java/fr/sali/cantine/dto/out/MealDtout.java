@@ -16,8 +16,10 @@ public class MealDtout {
     private Integer quantite;
     private Integer status;
 
-    private ImageDtout image ;
-
+    private String image ;
+    /*TODO
+    METTRE L4ADRESSE DU  SERVEUR DANS UN  FICHER DES PROPERTIES
+     */
     public MealDtout(MealEntity meal ) {
         this.id = meal.getIdplat();
         this.description = meal.getDescription();
@@ -26,7 +28,10 @@ public class MealDtout {
         this.quantite = meal.getQuantite();
         this.status = meal.getStatus();
         this.label = meal.getLabel();
-        this.image =  fromImgaeEntityToDo(meal.getImage());
+        var  path  = meal.getImage().getNameimage() ;
+         if  ( path == null )
+              path =  "3904de73-8edc-4e73-87ed-dd9e45a0346dmainimage3.jpg" ;
+        this.image = "http://localhost:8080/cantine/download/" + path ;
 
     }
 
@@ -94,11 +99,11 @@ public class MealDtout {
         this.status = status;
     }
 
-    public ImageDtout getImage() {
+    public String  getImage() {
         return image;
     }
 
-    public void setImage(ImageDtout image) {
+    public void setImage(String  image) {
         this.image = image;
     }
 }

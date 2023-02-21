@@ -48,7 +48,7 @@ public class SecurityConfig {
                          authorized.antMatchers("/cantine/user/signUP", "/cantine/upload").permitAll();
                          authorized.antMatchers("/cantine/user/existemail").permitAll();
                          authorized.antMatchers("/cantine/download/**").permitAll();
-                         authorized.antMatchers("/cantine/meals").permitAll();
+                         authorized.antMatchers("/cantine/meals",  "cantine/meals/getOne/**").permitAll();
                          authorized.anyRequest().authenticated();
                      }
              )

@@ -44,7 +44,7 @@ public class Sign {
     @PostMapping("/cantine/user/signUP")
        public ResponseEntity<Object> signUP ( @RequestBody UserDto user ){
            try {
-           //    signUpService.inscription(user , "user");
+              signUpService.inscription(user , "user");
            } catch (Exception e) {
                // return  e.getMessage() ;
                return  ResponseHandler.responseBuilder("Not saved" , HttpStatus.OK , null ) ;

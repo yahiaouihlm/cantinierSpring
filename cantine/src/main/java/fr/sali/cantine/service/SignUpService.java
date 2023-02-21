@@ -56,7 +56,7 @@ public class SignUpService {
          user.setImage(imageEntity);
 
          /* Test son  email   */
-        return userDao.save(user);
+        return null ;   // userDao.save(user);
     }
 
 

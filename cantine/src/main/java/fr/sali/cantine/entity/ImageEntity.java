@@ -19,7 +19,9 @@ public class ImageEntity implements Serializable {
 	@Column(unique=true, nullable=false)
 	private Integer idimage;
 
-	@Column(nullable=false)
+	@Column(name = "nameimage")
+	private String  nameimage ;
+	//@Column(nullable=false)
 	private byte[] image;
 
 	//bi-directional many-to-one association to MenuEntity
@@ -57,8 +59,17 @@ public class ImageEntity implements Serializable {
 		return this.menus;
 	}
 
+
 	public void setMenus(List<MenuEntity> menus) {
 		this.menus = menus;
+	}
+
+	public String getNameimage() {
+		return nameimage;
+	}
+
+	public void setNameimage(String nameimage) {
+		this.nameimage = nameimage;
 	}
 
 	public MenuEntity addMenus(MenuEntity menus) {
