@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS users (
     email  VARCHAR(255) NOT NULL ,
     password VARCHAR(300) NOT NULL,
     birthday  DATE NOT NULL,
-    creation_date DATE NULL DEFAULT NULL,
+    creation_date DATE NOT NULL ,
     credit DECIMAL(5,2)  DEFAULT 0 ,
     phone VARCHAR(16) NULL DEFAULT NULL,
     status   INT DEFAULT 1 ,       /* le 1  veut dire que utilisateur existe encore  0 son  compte est desactivé */
@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS commande (
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS image(
     idimage SERIAL PRIMARY KEY,
-    image BYTEA NOT NULL
+    imageName VARCHAR(400)
 );
 
 
@@ -125,7 +125,7 @@ CREATE TABLE IF NOT EXISTS commande_has_quantite (
     PRIMARY KEY (commande_idcommande, quantite_idquantite),
     FOREIGN KEY (commande_idcommande)  REFERENCES commande (idcommande),
     FOREIGN KEY (quantite_idquantite)  REFERENCES quantite (idquantite)
-
+);
 -- -----------------------------------------------------
 -- Table `cantiniere`.`menu_has_plat`
 -- -----------------------------------------------------
@@ -133,7 +133,7 @@ CREATE TABLE IF NOT EXISTS menu_has_plat (
     menu_idMenu INT NOT NULL,
     plat_idplat INT NOT NULL,
     PRIMARY KEY (menu_idMenu, plat_idplat),
-    FOREIGN KEY (menu_idMenu) REFERENCES menu (idMenu), ON DELETE CASCADE
+    FOREIGN KEY (menu_idMenu) REFERENCES menu (idMenu)ON DELETE CASCADE,
     FOREIGN KEY (plat_idplat) REFERENCES  plat (idplat) ON DELETE RESTRICT
     );
 
@@ -155,8 +155,8 @@ CREATE TABLE IF NOT EXISTS  user_has_role (
     user_id INT NOT NULL  ,
     role_idrole INT NOT NULL,
     PRIMARY KEY (user_id, role_idrole),
-    FOREIGN KEY (role_idrole) REFERENCES role (idrole),
-    FOREIGN KEY (user_id) REFERENCES 
+    FOREIGN KEY (role_idrole) REFERENCES role (idrole)
+    )
 
 
 -- -----------------------------------------------------
