@@ -10,7 +10,7 @@
 CREATE TABLE IF NOT EXISTS taxe(
 idtaxe SERIAL PRIMARY KEY ,
 taxe DECIMAL(3,2) NOT NULL
-    );
+);
 
 
 -- -----------------------------------------------------
@@ -133,8 +133,8 @@ CREATE TABLE IF NOT EXISTS menu_has_plat (
     menu_idMenu INT NOT NULL,
     plat_idplat INT NOT NULL,
     PRIMARY KEY (menu_idMenu, plat_idplat),
-    FOREIGN KEY (menu_idMenu) REFERENCES menu (idMenu),
-    FOREIGN KEY (plat_idplat) REFERENCES  plat (idplat)
+    FOREIGN KEY (menu_idMenu) REFERENCES menu (idMenu), ON DELETE CASCADE
+    FOREIGN KEY (plat_idplat) REFERENCES  plat (idplat) ON DELETE RESTRICT
     );
 
 

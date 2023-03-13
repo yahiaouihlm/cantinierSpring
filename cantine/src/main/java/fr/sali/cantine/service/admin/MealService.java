@@ -6,24 +6,20 @@ import fr.sali.cantine.dto.in.MealtDto;
 import fr.sali.cantine.dto.out.MealDtout;
 import fr.sali.cantine.entity.ImageEntity;
 import fr.sali.cantine.entity.MealEntity;
-import fr.sali.cantine.service.images.ImageServe;
+import fr.sali.cantine.service.images.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class MealService {
 
      @Autowired
-     private ImageServe imageServe;
+     private ImageService imageService;
     @Autowired
     private IMealDao mealDao ;
 
@@ -56,12 +52,11 @@ public class MealService {
         meal.setStatus(1);
 
         MultipartFile image =  mealDto.getImage();
-        var imagename  =  this.imageServe.uploadImage(image , "images/meals");
+        var imagename  =  this.imageService.uploadImage(image , "images/meals");
 
         ImageEntity imageEntity  =  new ImageEntity();
         imageEntity.setNameimage(imagename);
-        System.out.println("Le nom  de meal = " + meal.getLabel());
-        //ajouter l'image au  variable meal
+
 
         meal.setImage(imageEntity);
         return  mealDao.save(meal);
@@ -71,12 +66,19 @@ public class MealService {
   public  void removeMeal  (Integer  idMeal) throws  Exception {
         if (idMeal == null  || idMeal  < 0)
                throw new  IllegalArgumentException(" Invalid Arguments");
-
         var mealToRemove = mealDao.findById(idMeal);
-        if ( !mealToRemove.isPresent())
+        if (mealToRemove.isEmpty())
                 throw   new IllegalArgumentException(" Invalid Arguments ");
-        var imageName  =  mealToRemove.get().getImage().getNameimage();
-        if  (!this.imageServe.RemoveImga(imageName, "images/meals" )) {
+
+        var  meal =  mealToRemove.get();
+
+        if  (meal.getMenus().size() > 0 ) //  vérifier que  aucun plat n'est en association  avec un  menu
+            throw  new  RuntimeException("Impossible de supprimer ce plats");
+
+
+        var imageName  = meal.getImage().getNameimage();
+
+        if  (!this.imageService.removeImga(imageName, "images/meals" )) {
             System.out.println("je suis  la ducoup");
             throw new IllegalArgumentException("Invalid  image  name  ");
 
@@ -87,20 +89,18 @@ public class MealService {
   }
 
 
-  public MealEntity UpdateMeal (MealtDto mealDto , Integer idMeal){
+  public MealEntity UpdateMeal (MealtDto mealDto , Integer idMeal) throws Exception {
       if (idMeal == null  || idMeal  < 0)
           throw new  IllegalArgumentException(" Invalid Arguments");
 
       var mealToUpdate = mealDao.findById(idMeal);
 
-      if ( !mealToUpdate.isPresent())
+      if (mealToUpdate.isEmpty())
           throw   new IllegalArgumentException(" Invalid Arguments ");
 
 
       var mealtoupdate = mealToUpdate.get();
 
-      if (mealDto.getImage() != null)
-            mealtoupdate.setImage(null);
       if (mealDto.getCategorie() !=null)
                 mealtoupdate.setCategorie(mealDto.getCategorie());
       if (mealDto.getDescription() != null)
@@ -111,6 +111,17 @@ public class MealService {
           mealtoupdate.setPrixht(mealDto.getPrixht());
       if (mealDto.getQuantite() != null && mealDto.getQuantite()>0)
             mealtoupdate.setQuantite(mealDto.getQuantite());
+
+      // si  y'a une image qui  à était mise a jour il  faut faire le update dans le depot
+       if (mealDto.getImage()!=null){
+           var  dimensional  =  mealtoupdate.getImage().getNameimage();
+           var reimagine =  this.imageService.updateImage(dimensional,  mealDto.getImage(), "images/meals" );
+           var image =  new ImageEntity();
+           image.setNameimage(reimagine);
+           mealtoupdate.setImage(image);
+      }
+
+
       return  mealDao.save(mealtoupdate);
   }
 

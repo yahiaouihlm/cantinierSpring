@@ -91,9 +91,9 @@ public class JwtUsernameAndPasswordAuthenticationFilter  extends UsernamePasswor
         Algorithm algorithm =  Algorithm.HMAC256(key.getBytes());
 
         String jwtAccessToken  = JWT.create()
-                .withSubject(authResult.getName())   //  600=> 60 (in first of application)
+                .withSubject(authResult.getName())   //  600=> 60 (in first of application)     ('+5 * 6000 *1000')
                 .withExpiresAt(new Date(System.currentTimeMillis() + 5 * 6000 *1000))
-                .withIssuer(request.getRequestURI().toString())
+                .withIssuer(request.getRequestURI())
                 .withClaim("roles" , authResult.getAuthorities().stream().map(GrantedAuthority:: getAuthority).collect(Collectors.toList()))
                 .sign(algorithm);
 

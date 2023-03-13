@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  * The persistent class for the menu database table.
- * 
+ *
  */
 @Entity
 @Table(name="menu")
@@ -57,7 +57,8 @@ public class MenuEntity implements Serializable {
 	private ImageEntity image;
 
 	//bi-directional many-to-many association to PlatEntity
-	@ManyToMany(fetch = FetchType.EAGER)
+
+	@ManyToMany()
 	@JoinTable(
 			name=" menu_has_plat",
 			joinColumns={ @JoinColumn(name="menu_idmenu", nullable=false)},
@@ -68,13 +69,23 @@ public class MenuEntity implements Serializable {
 	@OneToMany(mappedBy="menu")
 	private List<QuantiteEntity> quantites;
 
+
+
+	@Column(name = "quantite")
+	private  Integer quantite;
 	public MenuEntity() {
 	}
 
 	public Integer getIdmenu() {
 		return this.idmenu;
 	}
+	public Integer getQuantite() {
+		return quantite;
+	}
 
+	public void setQuantite(Integer quantite) {
+		this.quantite = quantite;
+	}
 	public void setIdmenu(Integer idmenu) {
 		this.idmenu = idmenu;
 	}

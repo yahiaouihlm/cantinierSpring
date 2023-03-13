@@ -40,7 +40,7 @@ public class MealEntity implements Serializable {
 	private Integer status;
 
 	//bi-directional many-to-many association to MenuEntity
-	@ManyToMany
+	@ManyToMany()
 	@JoinTable(
 		name="menu_has_plat"
 		, joinColumns={

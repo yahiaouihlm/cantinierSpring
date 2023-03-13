@@ -5,9 +5,11 @@ import fr.sali.cantine.dto.in.UserDto;
 import fr.sali.cantine.entity.ImageEntity;
 import fr.sali.cantine.entity.RoleEntity;
 import fr.sali.cantine.entity.UserEntity;
+import fr.sali.cantine.service.images.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -21,6 +23,8 @@ public class SignUpService {
     @Autowired
     private IUserDao    userDao ;
 
+    @Autowired
+    private ImageService imageService;
 
     /**
      * @doc the method creat an  userEntity ,  crypt the password ,  and make  user as  default role, with  making also a default user image
@@ -51,10 +55,19 @@ public class SignUpService {
          /******************* Mettre l'image par défaut ********************************/
 
          ImageEntity imageEntity =  new ImageEntity();
-         imageEntity.setImage("hello"); // attention
+
+         if  (userdto.getImage() !=null ){
+             MultipartFile image =  userdto.getImage();
+             var imagename  =  this.imageService.uploadImage(image , "images/users");
+             imageEntity.setNameimage(imagename);
+         }
+         else {
+             imageEntity.setNameimage("defaultUserProfileImage.png");
+         }
+
 
          user.setImage(imageEntity);
-
+        System.out.println("la date  de naissace de ce genie est  " +   user.getBirthday()) ;
          /* Test son  email   */
         return null ;   // userDao.save(user);
     }

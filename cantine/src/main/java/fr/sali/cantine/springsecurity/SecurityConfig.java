@@ -49,6 +49,7 @@ public class SecurityConfig {
                          authorized.antMatchers("/cantine/user/existemail").permitAll();
                          authorized.antMatchers("/cantine/download/**").permitAll();
                          authorized.antMatchers("/cantine/meals",  "cantine/meals/getOne/**").permitAll();
+                         authorized.antMatchers("/cantine/menus/getMenus").permitAll();
                          authorized.anyRequest().authenticated();
                      }
              )

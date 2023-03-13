@@ -1,9 +1,15 @@
 package fr.sali.cantine.dto.in;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import fr.sali.cantine.entity.UserEntity;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 
@@ -14,7 +20,10 @@ import java.util.regex.Pattern;
 public class UserDto {
     private static final Logger LOG = LogManager.getLogger();
     private Integer id;
-    private LocalDate birthday;
+
+
+    private  String birthdayAsString;
+    private LocalDate birthday ;
     private LocalDate creationDate;
     private BigDecimal credit;
     private String email;
@@ -23,6 +32,9 @@ public class UserDto {
     private Integer status;
     private String fullname;
     private String username;
+
+
+    private MultipartFile image ;
     @JsonIgnore
     private List<OrderDto> commandes;
 
@@ -30,6 +42,8 @@ public class UserDto {
      * @doc  la méthode permet de vérifié si la "syntaxe" du  numéro téléphone française  est  valide en  la matchant  avec une regex
      * @throws IllegalArgumentException  si  le numéro  ne matche pas avec la regex du  numéro de téléphone
      */
+
+
     @JsonIgnore
     public void phoneValidator ()throws  IllegalArgumentException{
            if (this.phone == null)
@@ -68,6 +82,15 @@ public class UserDto {
          validateUserNullableOrEmptyInformation ();
          validateLenghtUserInformation();
          validationUserEmail();
+        try {
+
+            this.birthday =  LocalDate.parse(this.birthdayAsString);
+
+        }catch ( Exception  e){
+
+            throw  new IllegalArgumentException("Invalid   user  Birthday  :: String  can  not be parsed  ");
+        }
+
         var  user = new UserEntity( this.username ,  this.fullname , this.email ,  this.birthday,  this.password);
         if (this.phone != null )
             phoneValidator();
@@ -82,7 +105,7 @@ public class UserDto {
      */
     @JsonIgnore
      public   void checkNewUserInformation () throws  IllegalArgumentException{
-        if (this.username == null  || this.fullname == null  ||  this.birthday == null ){
+        if (this.username == null  || this.fullname == null  ||  this.birthdayAsString == null ){
             LOG.debug("username = { }   userfnmae =  { } or  birthday = { }  is  null  ",  this.username ,  this.fullname ,  this.birthday);
                throw  new IllegalArgumentException("Invalid user Informations NO null Infomation accepted  ");
 
@@ -91,6 +114,15 @@ public class UserDto {
         if (this.fullname.trim().length() < 4 || this.username.trim().length() < 4  ) {
                  throw  new IllegalArgumentException("Invalid user Inofrmation  Lenght ");
          }
+
+        try {
+            this.birthday =  LocalDate.parse(this.birthdayAsString);
+
+        }catch ( Exception  e){
+            throw  new IllegalArgumentException("Invalid   user  Birthday  :: String  can  not be parsed  ");
+        }
+
+
 
         if (this.phone != null )
             phoneValidator();
@@ -117,7 +149,9 @@ public class UserDto {
     @JsonIgnore
     public  void validateLenghtUserInformation()throws  IllegalArgumentException {
         if (this.username.length() < 4 || this.fullname.length() < 4 ||  this.password.length() < 4 )
-            throw new IllegalArgumentException("Invalide Lenght Arguments");
+            throw new IllegalArgumentException("Invalid Lenght Arguments");
+
+
     }
 
 
@@ -128,7 +162,7 @@ public class UserDto {
      */
     @JsonIgnore
     public void  validateUserNullableOrEmptyInformation  () throws  IllegalArgumentException{
-        if (this.username == null  || this.fullname == null || this.email == null || this.password == null || this.birthday == null)
+        if (this.username == null  || this.fullname == null || this.email == null || this.password == null || this.birthdayAsString == null)
             throw  new  IllegalArgumentException("Ivalid Argument") ;
 
         if (this.username.trim().isEmpty() ||  this.fullname .trim().isEmpty() || this.email .trim().isEmpty() || this.password.trim().isEmpty())
@@ -226,4 +260,29 @@ public class UserDto {
     public void setCommandes(List<OrderDto> commandes) {
         this.commandes = commandes;
     }
+
+
+    public String getFullname() {
+        return fullname;
+    }
+
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
+    }
+
+    public MultipartFile getImage() {
+        return image;
+    }
+
+    public void setImage(MultipartFile  image) {
+        this.image = image;
+    }
+    public String getDateofbirth() {
+        return birthdayAsString;
+    }
+
+    public void setDateofbirth(String dateofbirth) {
+        this.birthdayAsString = dateofbirth;
+    }
+
 }

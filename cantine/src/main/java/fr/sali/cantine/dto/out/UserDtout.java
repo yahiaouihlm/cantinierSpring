@@ -1,5 +1,6 @@
 package fr.sali.cantine.dto.out;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import fr.sali.cantine.entity.UserEntity;
 
@@ -12,6 +13,7 @@ public class UserDtout {
 
 
     private Integer id;
+
     private LocalDate birthday;
     private BigDecimal credit;
     private String email;

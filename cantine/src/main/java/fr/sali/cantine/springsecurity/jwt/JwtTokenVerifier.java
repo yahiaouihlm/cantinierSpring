@@ -56,7 +56,9 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
                     response.addHeader("error",  e.getMessage());
                     response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                     Map<String, String> error = new HashMap<>();
-                    error.put("error_message", e.getMessage());
+                    error.put("message", "EXPIRED_TOKEN" );
+                    error.put("data", "EXPIRED_TOKEN" );
+                    error.put("httpStatus" , "OK" );
                     response.setContentType("application/json");
                     new ObjectMapper().writeValue(response.getOutputStream(), error);
                 }

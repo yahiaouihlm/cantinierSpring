@@ -31,16 +31,12 @@ public class MealDtout {
         var  path  = meal.getImage().getNameimage() ;
          if  ( path == null )
               path =  "3904de73-8edc-4e73-87ed-dd9e45a0346dmainimage3.jpg" ;
-        this.image = "http://localhost:8080/cantine/download/" + path ;
+        this.image = "http://localhost:8080/cantine/download/images/meals/" + path ;
 
     }
 
 
 
-    @JsonIgnore
-   public  ImageDtout  fromImgaeEntityToDo(ImageEntity imageEntity)  {
-        return  new ImageDtout(imageEntity);
-   }
 
     public Integer getId() {
         return id;
