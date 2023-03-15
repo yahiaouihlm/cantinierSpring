@@ -24,7 +24,16 @@ public class Menus {
     @Autowired
     MenuService menuService;
 
-
+    @PostMapping(value = "cantine/menus/update/{idmenu}" , consumes = MULTIPART_FORM_DATA_VALUE)
+    public  ResponseEntity<Object> updateMenu( @ModelAttribute MenuDto menu , @PathVariable("idmenu") Integer idmenu){
+        try {
+            this.menuService.updateMenu(menu , idmenu);
+            return ResponseHandler.responseBuilder("SAVED", HttpStatus.OK, "SAVED");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return ResponseHandler.responseBuilder("ERROR", HttpStatus.OK, "ERROR");
+        }
+    }
 
     @GetMapping(value = "cantine/menus/removeOne/{id}")
     public  ResponseEntity<Object> removeMenu (@PathVariable("id") Integer  id ){
@@ -42,10 +51,10 @@ public class Menus {
         //   System.out.println("je  suis  aussi  dans le controlleur est voici  meals" + mealsJSO);
         try {
               this.menuService.addMenu(menu);
-            return ResponseHandler.responseBuilder("Enregistrer", HttpStatus.OK, "Enregistrer");
+            return ResponseHandler.responseBuilder("ADDED", HttpStatus.OK, "ADDED");
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            return ResponseHandler.responseBuilder("NOEnregistrer", HttpStatus.OK, "ERROR d'enregistrement");
+            return ResponseHandler.responseBuilder("ERROR", HttpStatus.OK, "ERROR");
         }
     }
 

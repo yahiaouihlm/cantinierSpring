@@ -3,6 +3,7 @@ package fr.sali.cantine.service.admin;
 
 import fr.sali.cantine.dao.IMealDao;
 import fr.sali.cantine.dao.IMenuDao;
+import fr.sali.cantine.dto.in.MealtDto;
 import fr.sali.cantine.dto.in.MenuDto;
 import fr.sali.cantine.dto.out.MenuDtout;
 import fr.sali.cantine.entity.ImageEntity;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.sql.SQLOutput;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -34,7 +36,52 @@ public class MenuService {
        @Autowired
        ImageService imageService ;
 
+       public MenuEntity updateMenu (MenuDto menudto ,  Integer idmenu) throws  Exception {
+           if (idmenu==null) {
+               throw   new IllegalArgumentException("Invalid  Menu ID  ID == NULL");
+           }
+           var menuinDBOpt =  this.menuDao.findById(idmenu);
+           if (!menuinDBOpt.isPresent()) {
+               throw   new IllegalArgumentException("Invalid  Menu ID");
+           }
+           var menuinDB =  menuinDBOpt.get();
+           if (menudto.getLabel()== null || menudto.getLabel().length()<=0 || menudto.getLabel().length()> 100 )
+               throw new IllegalArgumentException("Invalid Label of Menu ");
+           if  (menudto.getDescription() == null || menudto.getLabel().length()<=0  )
+               throw new IllegalArgumentException("Invalid Label of Menu ");
+           if (menudto.getPrixht() == null || menudto.getPrixht().compareTo(BigDecimal.ZERO) < 0 )
+               throw  new IllegalArgumentException("Invalid Price Of menu ");
+           if (menudto.getQuantite() == null || menudto.getQuantite() <0 )
+               throw  new IllegalArgumentException("Invalid  Menu  Quantity ");
 
+           if (menudto.getImage() != null ){
+               var  oldImageName  =  menuinDB.getImage().getNameimage();
+               var reimagine =  this.imageService.updateImage(oldImageName,  menudto.getImage(), "images/meals" );
+               var image =  new ImageEntity();
+               image.setNameimage(reimagine);
+               menuinDB.setImage(image);
+           }
+           menuinDB.setQuantite(menudto.getQuantite());
+           menuinDB.setJourassocier(LocalDate.now().toString()) ;
+           menuinDB.setPrixht(menudto.getPrixht());
+           menuinDB.setStatus(1);
+           menuinDB.setLabel(menudto.getLabel());
+           menuinDB.setDescription(menudto.getDescription());
+
+           List<Integer> mealIDs = menudto.getMealsIDS().stream().map((id)-> id.replaceAll("[^0-9]+", "")).map(
+                   Integer::parseInt).toList();
+           if (mealIDs.size()< 2)
+               throw  new IllegalArgumentException("Un nombre de Plats insufusant ");
+
+           List <MealEntity> meals =  getListMealByIDs( mealIDs );
+           if (meals.size() < 2 ){
+               throw  new  IllegalArgumentException("Invalid  Meal  IDs ");
+           }
+           menuinDB.setPlats(meals);
+
+
+           return this.menuDao.save(menuinDB);
+       }
        public void removeMenuByid  ( Integer id ) throws Exception  {
            if (id == null  || id  <  0) {
                throw   new   IllegalArgumentException("Invalid  Argument");
@@ -58,13 +105,19 @@ public class MenuService {
            List<Integer> mealIDs = menuDto.getMealsIDS().stream().map((id)-> id.replaceAll("[^0-9]+", "")).map(
                    Integer::parseInt).toList();
 
-           System.out.println("je suis avant   menudto ");
+           if (mealIDs.size()< 2)
+                throw  new IllegalArgumentException("Un nombre de Plats insufusant ");
+
            List <MealEntity> meals =  getListMealByIDs( mealIDs );
-           System.out.println("je suis apres  menudto ");
+
+           if (meals.size() < 2 ){
+               throw  new  IllegalArgumentException("Invalid  Meal  IDs ");
+           }
+
            menu.setPlats(meals);
            menu.setStatus(1);
 
-           System.out.println("je suis  dans le traitement des images ");
+
            MultipartFile image  =  menuDto.getImage();
            var imagename=  this.imageService.uploadImage(image, "images/menus");
 

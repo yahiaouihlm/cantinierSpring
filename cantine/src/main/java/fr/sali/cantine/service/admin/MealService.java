@@ -114,8 +114,8 @@ public class MealService {
 
       // si  y'a une image qui  à était mise a jour il  faut faire le update dans le depot
        if (mealDto.getImage()!=null){
-           var  dimensional  =  mealtoupdate.getImage().getNameimage();
-           var reimagine =  this.imageService.updateImage(dimensional,  mealDto.getImage(), "images/meals" );
+           var  oldImageName  =  mealtoupdate.getImage().getNameimage();
+           var reimagine =  this.imageService.updateImage(oldImageName,  mealDto.getImage(), "images/meals" );
            var image =  new ImageEntity();
            image.setNameimage(reimagine);
            mealtoupdate.setImage(image);

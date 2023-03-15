@@ -9,7 +9,7 @@ public class ImageDtout {
 
       public ImageDtout (ImageEntity imageEntity){
           this.idimage  = imageEntity.getIdimage() ;
-          this.image   =  new String  (imageEntity.getImage()) ;
+
       }
     public Integer getIdimage() {
         return idimage;

@@ -53,10 +53,10 @@ public class MenuDto {
 
     @JsonIgnore
     public MenuEntity toMenuEntity () throws  IllegalArgumentException {
-        System.out.println("exceptio  lever  ");
+
         if (this.description == null || this.label ==null || this.prixht == null
-               || this.image == null)
-            throw new IllegalArgumentException("Invalid Argument  No  Null  Argument accepted ") ;
+               || this.image == null ||  this.prixht.compareTo(BigDecimal.ZERO) < 0 )
+            throw new IllegalArgumentException("Invalid Argument  No  Null  Argument accepted  in MenutoEntity") ;
 
         MenuEntity   menu =  new MenuEntity() ;
 

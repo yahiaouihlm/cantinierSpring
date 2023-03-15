@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS users (
     phone VARCHAR(16) NULL DEFAULT NULL,
     status   INT DEFAULT 1 ,       /* le 1  veut dire que utilisateur existe encore  0 son  compte est desactivé */
     UNIQUE (email),
-    FOREIGN KEY (id) REFERENCES image (idimage)
+    FOREIGN KEY (userimage) REFERENCES image (idimage)
     );
 
 
@@ -65,6 +65,7 @@ CREATE TABLE IF NOT EXISTS menu (
     prixHt  DECIMAL(5,2) NOT NULL,
     image_idimage  INT NOT NULL,
     jourAssocier  VARCHAR(45) ,
+    quantite INT NOT NULL ,
     FOREIGN KEY (image_idimage) REFERENCES image (idimage)
     );
 
@@ -169,3 +170,14 @@ CREATE TABLE IF NOT EXISTS plat_has_commande (
     FOREIGN KEY (plat_idplat) REFERENCES plat (idplat) ON DELETE NO ACTION ON UPDATE NO ACTION,
     FOREIGN KEY (commande_idcommande) REFERENCES commande (idcommande) ON DELETE NO ACTION ON UPDATE NO ACTION
     );
+
+
+-- table of  meal Confirmation
+
+
+CREATE TABLE confirmationToken (
+   tokenid SERIAL PRIMARY KEY,
+   confirmationToken VARCHAR(255),
+   createdDate TIMESTAMP,
+   user_id INTEGER NOT NULL REFERENCES users(id)
+);

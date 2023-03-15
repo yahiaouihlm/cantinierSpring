@@ -22,6 +22,8 @@ public class UserDtout {
     private String username;
    // private List<OrderDtout> commandes;
 
+
+    private  String image ;
     public UserDtout (){}
 
     public  UserDtout (UserEntity user){
@@ -36,6 +38,8 @@ public class UserDtout {
        else {
             this.credit =  user.getCredit() ;
         }
+
+       this.image = "http://localhost:8080/cantine/download/images/users/" +  user.getImage().getNameimage();
     }
     /**
      * Constructor of the object.
@@ -117,11 +121,12 @@ public class UserDtout {
         this.username = username;
     }
 
-  /*  public List<OrderDtout> getCommandes() {
-        return commandes;
+    public String getImage() {
+        return image;
     }
 
-    public void setCommandes(List<OrderDtout> commandes) {
-        this.commandes = commandes;
-    }*/
+    public void setImage(String image) {
+        this.image = image;
+    }
+
 }

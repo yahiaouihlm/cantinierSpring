@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.http.HttpRequest;
@@ -36,18 +37,55 @@ public class Sign {
      * @return
      */
 
+    @PostMapping("/cantine/users/activatedAcount/{email}")
+    public ResponseEntity<Object> ActiveAcount(@PathVariable("email") String email ) {
+        try {
 
+             this.signUpService.mailSender(email);
+
+            return  ResponseHandler.responseBuilder("SECCESS" , HttpStatus.OK , "SECCESS" ) ;
+        } catch (Exception e) {
+
+            System.out.println(e.getMessage());
+            return  ResponseHandler.responseBuilder("ERROR" , HttpStatus.OK , "ERROR" ) ;
+        }
+
+    }
+
+    @GetMapping(value = "/cantine/user/confirm-acount")
+    public ResponseEntity<String> confirmEmail (@RequestParam("token") String  token){
+
+        String html;
+        try{
+
+           this.signUpService.checkTokenLink(token);
+
+         html = "<html><body><h1>Votre compte a été vérifié avec succès.</h1></body></html>";
+
+       }
+        catch (IllegalArgumentException e){
+            html = "<html><body><h1>Le lien est invalide.</h1></body></html>";
+        }
+        catch (RuntimeException e){
+            html = "<html><body><h1>Le lien est expiré.</h1></body></html>";
+        } catch (Exception e){
+         html = "<html><body><h1>Le lien est invalide.</h1></body></html>";
+        }
+        return  ResponseEntity.ok(html) ;
+    }
     @PostMapping(value = "/cantine/user/signUP",  consumes = MULTIPART_FORM_DATA_VALUE)
        public ResponseEntity<Object> signUP (@ModelAttribute UserDto user ){
            try {
-               signUpService.inscription(user , "user");
-               System.out.println(user);
-           } catch (Exception e) {
-               // return  e.getMessage() ;
-               System.out.println(e.getMessage());
+
+              signUpService.inscription(user , "user");
+
                return  ResponseHandler.responseBuilder("SECCESS" , HttpStatus.OK , "SECCESS" ) ;
+           } catch (Exception e) {
+
+               System.out.println(e.getMessage());
+               return  ResponseHandler.responseBuilder("ERROR" , HttpStatus.OK , "ERROR" ) ;
            }
-           return  ResponseHandler.responseBuilder("ERROR" , HttpStatus.OK , "ERROR" ) ;
+
        }
 
 
@@ -89,6 +127,7 @@ public class Sign {
                  return  ResponseHandler.responseBuilder("notexistingUser" , HttpStatus.OK  ,  "Not Exist");
              }
         }
+
 
 
 }

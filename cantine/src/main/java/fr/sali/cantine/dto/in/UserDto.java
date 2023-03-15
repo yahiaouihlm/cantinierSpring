@@ -91,7 +91,7 @@ public class UserDto {
             throw  new IllegalArgumentException("Invalid   user  Birthday  :: String  can  not be parsed  ");
         }
 
-        var  user = new UserEntity( this.username ,  this.fullname , this.email ,  this.birthday,  this.password);
+        var  user = new UserEntity( this.username.toLowerCase() ,  this.fullname.toLowerCase() , this.email ,  this.birthday,  this.password);
         if (this.phone != null )
             phoneValidator();
         user.setPhone(this.phone);

@@ -15,7 +15,7 @@
 	<name>cantine</name>
 	<description>cantine en  Spring </description>
 	<properties>
-		<java.version>17</java.version>
+		<java.version>19.0.2</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
