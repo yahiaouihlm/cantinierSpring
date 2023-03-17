@@ -7,6 +7,8 @@
 /dataSources/
 /dataSources.local.xml
 /.idea
-/images/meals
-/images/users
+/target/**
+/images/menus/**
+/images/meals/**
+/images/users/**
 src/main/resources

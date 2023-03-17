@@ -2,7 +2,10 @@ package fr.sali.cantine.dto.in;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import fr.sali.cantine.entity.*;
+import fr.sali.cantine.service.exception.MealException;
 import jdk.jfr.ContentType;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.http.MediaType;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -11,6 +14,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public class MealtDto implements Serializable {
+    private static final Logger LOG = LogManager.getLogger();
     private String categorie;
     private String description;
     private String label;
@@ -30,12 +34,15 @@ public class MealtDto implements Serializable {
      */
 
     @JsonIgnore
-    public MealEntity toMeal () throws  IllegalArgumentException {
+    public MealEntity toMeal () throws MealException {
         if (this.categorie == null || this.label == null || this.description == null || this.prixht == null
                 || this.quantite == null  || this.image == null  )
-             throw new IllegalArgumentException("Invalide Argument No Null  Argument Accepted  ok  ") ;
+             throw  new MealException(
+                     "No Null Parameter Is Accepted { categorie : "+this.categorie+ " label :"+this.label+ " description"+this.description+" prixht : "+ prixht+ " quantite: "+ this.quantite+" image : " + this.image + "}"
+                 ) ;
+
         if (this.quantite < 0    || this.prixht.compareTo(BigDecimal.ZERO) < 0 )
-            throw new IllegalArgumentException("Invalide Quantity Argument (it must  be an  Intger bigger that  0 )") ;
+            throw  new MealException(" Quantite And prixht Must Be Bigger Than 0 { quantite :" + quantite + "prixht : "+ prixht + " }" );
 
         MealEntity plat =  new MealEntity();
         plat.setLabel(this.label);
