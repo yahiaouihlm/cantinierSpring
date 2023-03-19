@@ -22,6 +22,7 @@ public class CantineUserDailsService implements UserDetailsService {
             throw   new UsernameNotFoundException("this  User Doest not exist");
         }
         var user =  userOptional.get();
+
         return new CantineUserDetails(user);
     }
 }

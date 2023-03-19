@@ -29,16 +29,21 @@ public class MealService {
     @Autowired
     private IMealDao mealDao ;
 
-
+    public  MealService(){}
     public MealDtout getMealByid ( Integer id ) throws  MealException {
-        if (id == null )
-             throw  new MealException("  Invalid Meal ID  in getMealByid : ID can not Be NuLL ");
+        if (id == null ){
+            MealService.LOG.debug("Le Meal ID est Invalid Dans  le getMealByid");
+            throw  new MealException("  Invalid Meal ID");
+
+        }
+
         var meal = this.mealDao.findById(id);
         if (meal.isPresent()) {
             return  new MealDtout(meal.get());
         }
+        MealService.LOG.debug("Aucun  Plat n'a étais  trouver avec un  ID = {]", id);
+        throw  new MealException("No Meal Has Been Found " );
 
-        throw  new MealException("No Meal Has Been Found  In getMealByid  With : "+ id +"ID ");
     }
 
     public List<MealDtout> getmeals (){
@@ -72,22 +77,30 @@ public class MealService {
 
 
   public  void removeMeal  (Integer  idMeal) throws MealException, RemoveMealException {
-        if (idMeal == null  || idMeal  < 0)
-               throw new MealException("Invalid Meal ID  TO  Remove  { ID : " + idMeal + "}");
+        if (idMeal == null  || idMeal  < 0){
+            MealService.LOG.debug("Invalid Meal ID  TO  Remove  { ID : " + idMeal + "}");
+            throw new MealException("Invalid Meal ID ");
+        }
+
         var mealToRemove = mealDao.findById(idMeal);
-        if (mealToRemove.isEmpty())
-            throw new MealException("Meal Not Found To Remove { ID : "+ idMeal + "}" );
+        if (mealToRemove.isEmpty()){
+            MealService.LOG.debug("Meal Not Found To Remove { ID : "+ idMeal + "}" );
+            throw new MealException("No Meal Has Been Found ");
+        }
+
 
       var  meal =  mealToRemove.get();
 
-        if  (meal.getMenus().size() > 0 ) //  vérifier que  aucun plat n'est en association  avec un  menu
-            throw  new RemoveMealException("This Meal Can Not be Removed Because Its founds in Other Meal  { label :" + meal.getLabel() + " id: "+meal.getIdplat()+"}");
+        if  (meal.getMenus().size() > 0 ){//  vérifier que  aucun plat n'est en association  avec un  menu
+            MealService.LOG.debug("This Meal Can Not be Removed Because Its founds in Other Meal  { label :" + meal.getLabel() + " id: "+meal.getIdplat()+"}");
+            throw  new RemoveMealException("Can Not Remove Meal BeCause it's Depends On Other Menu ");
+        }
+
 
 
         var imageName  = meal.getImage().getNameimage();
 
         if  (!this.imageService.removeImga(imageName, "images/meals" )) {
-
             throw new MealException (" Image Can Not Be Removed ");
 
         }
@@ -98,13 +111,19 @@ public class MealService {
 
 
   public MealEntity UpdateMeal (MealtDto mealDto , Integer idMeal) throws MealException, ImagePathException, IOException {
-      if (idMeal == null  || idMeal  < 0)
-          throw new MealException("Invalid Meal ID  TO  update  { ID : " + idMeal + "}");
+      if (idMeal == null  || idMeal  < 0){
+          MealService.LOG.debug("Invalid Meal ID  TO  update  { ID : " + idMeal + "}");
+          throw new MealException("Invalid  Meal ID To Update ");
+      }
+
 
       var mealToUpdate = mealDao.findById(idMeal);
 
-      if (mealToUpdate.isPresent())
-          throw   new MealException(" Invalid Arguments No Meal Found With  { ID :" + idMeal + " } ");
+      if (mealToUpdate.isPresent()){
+          MealService.LOG.debug(" Invalid Arguments No Meal Found With  { ID :" + idMeal + " } ");
+          throw   new MealException("Invalid Meal ID ,  Can not Update");
+      }
+
 
 
       var mealtoupdate = mealToUpdate.get();
@@ -137,8 +156,6 @@ public class MealService {
 
       return  mealDao.save(mealtoupdate);
   }
-
-
 
 
 

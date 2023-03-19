@@ -54,7 +54,7 @@ public class UserDtout {
         }
 
         this.setEmail((String) pMap.get("email"));
-        //this.setImageId((Integer) pMap.get("imageId"));
+
         this.setUsername((String) pMap.get("name"));
         this.setUserfname((String) pMap.get("firstname"));
         this.setPhone((String) pMap.get("phone"));
