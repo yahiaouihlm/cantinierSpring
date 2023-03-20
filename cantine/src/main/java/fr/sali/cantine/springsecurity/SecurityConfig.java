@@ -4,6 +4,8 @@ import fr.sali.cantine.springsecurity.jwt.JwtTokenVerifier;
 import fr.sali.cantine.springsecurity.jwt.JwtUsernameAndPasswordAuthenticationFilter;
 import fr.sali.cantine.springsecurity.springsecurityuser.CantineUserDailsService;
 import jdk.jfr.ContentType;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,6 +17,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.cors.CorsConfiguration;
@@ -29,13 +32,17 @@ import java.util.Arrays;
 @EnableWebSecurity
 public class SecurityConfig {
 
+
+    @Qualifier("delegatedAuthenticationEntryPoint")
+    AuthenticationEntryPoint authEntryPoint;
     private JwtTokenVerifier jwtTokenVerifier;
     private  BCryptPasswordEncoder bCryptPasswordEncoder;
     private CantineUserDailsService cantineUserDailsService ;
-    public  SecurityConfig (CantineUserDailsService cantineUserDailsService , BCryptPasswordEncoder bCryptPasswordEncoder,  JwtTokenVerifier jwtTokenVerifier){
+    public  SecurityConfig (CantineUserDailsService cantineUserDailsService , BCryptPasswordEncoder bCryptPasswordEncoder,  JwtTokenVerifier jwtTokenVerifier,  AuthenticationEntryPoint authEntryPoint){
         this.cantineUserDailsService =  cantineUserDailsService ;
         this.bCryptPasswordEncoder =  bCryptPasswordEncoder;
         this.jwtTokenVerifier   =  jwtTokenVerifier;
+        this.authEntryPoint =  authEntryPoint;
     }
     @Bean
     public SecurityFilterChain securityFilterChain (HttpSecurity http) throws Exception {
@@ -53,9 +60,13 @@ public class SecurityConfig {
                          authorized.anyRequest().authenticated();
                      }
              )
+
              .authenticationProvider(authenticationProvider())
              .addFilter( new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager()))
              .addFilterBefore(jwtTokenVerifier, JwtUsernameAndPasswordAuthenticationFilter.class)
+             .exceptionHandling()
+             .authenticationEntryPoint(authEntryPoint)
+             .and()
              .build();
    }
 

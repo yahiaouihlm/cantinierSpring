@@ -6,15 +6,28 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.io.IOException;
 
 @ControllerAdvice
-public class HandlerException {
+public class HandlerException{
 
     private static final Logger LOG = LogManager.getLogger();
+
+    @ExceptionHandler(AuthenticationException.class )
+    public ResponseEntity<ExceptionDto> handleAuthenticationException(Exception ex) {
+        System.out.println(ex);
+        return new ResponseEntity<ExceptionDto>(new ExceptionDto(" Conmpte disactiver ") , HttpStatus.UNAUTHORIZED);
+
+    }
+
+
 
     @ExceptionHandler(MenuException.class)
     public ResponseEntity<ExceptionDto> exceptionHandler (MenuException exception){

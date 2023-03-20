@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 import com.auth0.jwt.algorithms.Algorithm;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -37,7 +38,7 @@ public class JwtUsernameAndPasswordAuthenticationFilter  extends UsernamePasswor
 
 
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws DisabledException ,AuthenticationException {
         var  username =  request.getParameter("username");
         var passsword  = request.getParameter("password");
         if (ObjectUtils.isEmpty(username) || ObjectUtils.isEmpty(passsword) ) {
@@ -64,14 +65,18 @@ public class JwtUsernameAndPasswordAuthenticationFilter  extends UsernamePasswor
         JwtUsernameAndPasswordAuthenticationFilter.LOG.debug("--> JwtAuthenticationFilter.attemptAuthentication({}, [PROTECTED])",
                 username);
 
-        try {
+    //    try {
             Authentication  authentication =  new UsernamePasswordAuthenticationToken(username , passsword );
              ///
 
-            return this.authenticationManager.authenticate(authentication) ;
-        }catch (  Exception  e ){
-            Map<String, String> idToken = new HashMap<>();
+        return this.authenticationManager.authenticate(authentication) ;
+/*       }catch (  Exception  e ) {
+            System.out.println(e);
+        }*/
 
+/*            System.out.println(e);
+            Map<String, String> idToken = new HashMap<>();
+            System.out.println(e.getMessage());
             response.setContentType("application/json");
             idToken.put("status" , HttpStatus.FORBIDDEN.name() );
             idToken.put("message" ,  "Authentication error");
@@ -80,9 +85,9 @@ public class JwtUsernameAndPasswordAuthenticationFilter  extends UsernamePasswor
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
-        }
+        }*/
 
-        return null ;
+       // return null ;
     }
 
     @Override
