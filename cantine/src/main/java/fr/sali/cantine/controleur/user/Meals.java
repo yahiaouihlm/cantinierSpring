@@ -42,10 +42,7 @@ public class Meals {
          return  ResponseHandler.responseBuilder("SUCCESS", HttpStatus.OK ,"SUCCESS");
      }
 
-     /*
-        meals/{id}f
-        @RequestMapping("id") String myid
-      */
+
     @GetMapping("/cantine/meals")
     public ResponseEntity<Object> getmelas(){
       List<MealDtout> meals =  new ArrayList<>( this.service.getmeals()) ;

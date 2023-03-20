@@ -15,6 +15,14 @@ import java.io.IOException;
 public class HandlerException {
 
     private static final Logger LOG = LogManager.getLogger();
+
+    @ExceptionHandler(MenuException.class)
+    public ResponseEntity<ExceptionDto> exceptionHandler (MenuException exception){
+        HandlerException.LOG.info("EXCEPTION HAS BEEN  THROWN ABOUT  :  {}", exception.getMessage());
+        return new ResponseEntity<ExceptionDto>(new ExceptionDto("INVALID ARGUMENTS") , HttpStatus.BAD_REQUEST);
+    }
+
+    /*************************************** Meals Exceptions Handler ******************************************/
     @ExceptionHandler(MealException.class)
     public ResponseEntity<ExceptionDto> exceptionHandler(MealException exception){
         HandlerException.LOG.info("EXCEPTION HAS BEEN THROWED   :  {}", exception.getMessage());
