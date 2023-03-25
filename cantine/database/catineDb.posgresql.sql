@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS users (
     phone VARCHAR(16) NULL DEFAULT NULL,
     status   INT DEFAULT 1 ,       /* le 1  veut dire que utilisateur existe encore  0 son  compte est desactivé */
     UNIQUE (email),
-    FOREIGN KEY (userimage) REFERENCES image (idimage)
+    FOREIGN KEY (userimage) REFERENCES image (idimage) ON DELETE CASCADE
     );
 
 
@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS menu (
     image_idimage  INT NOT NULL,
     jourAssocier  VARCHAR(45) ,
     quantite INT NOT NULL ,
-    FOREIGN KEY (image_idimage) REFERENCES image (idimage)
+    FOREIGN KEY (image_idimage) REFERENCES image (idimage) ON DELETE CASCADE
     );
 
 
@@ -100,7 +100,7 @@ CREATE TABLE IF NOT EXISTS plat(
     quantite  INT    DEFAULT 0 ,
     status INT  NOT NULL,
     PRIMARY KEY (idplat),
-    FOREIGN KEY (image_idimage) REFERENCES image (idimage)
+    FOREIGN KEY (image_idimage) REFERENCES image (idimage) ON DELETE CASCADE
     );
 
 
@@ -156,7 +156,8 @@ CREATE TABLE IF NOT EXISTS  user_has_role (
     user_id INT NOT NULL  ,
     role_idrole INT NOT NULL,
     PRIMARY KEY (user_id, role_idrole),
-    FOREIGN KEY (role_idrole) REFERENCES role (idrole)
+    FOREIGN KEY (role_idrole) REFERENCES role (idrole) ON DELETE CASCADE
+    FOREIGN KEY (user_id)    REFERENCES users (id) ON DELETE CASCADE
     )
 
 
