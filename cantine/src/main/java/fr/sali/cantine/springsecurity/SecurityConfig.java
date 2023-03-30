@@ -3,8 +3,7 @@ package fr.sali.cantine.springsecurity;
 import fr.sali.cantine.springsecurity.jwt.JwtTokenVerifier;
 import fr.sali.cantine.springsecurity.jwt.JwtUsernameAndPasswordAuthenticationFilter;
 import fr.sali.cantine.springsecurity.springsecurityuser.CantineUserDailsService;
-import jdk.jfr.ContentType;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,12 +32,13 @@ import java.util.Arrays;
 public class SecurityConfig {
 
 
-    @Qualifier("delegatedAuthenticationEntryPoint")
-    AuthenticationEntryPoint authEntryPoint;
+
+    DelegatedAuthenticationEntryPoint authEntryPoint  ;
+
     private JwtTokenVerifier jwtTokenVerifier;
     private  BCryptPasswordEncoder bCryptPasswordEncoder;
     private CantineUserDailsService cantineUserDailsService ;
-    public  SecurityConfig (CantineUserDailsService cantineUserDailsService , BCryptPasswordEncoder bCryptPasswordEncoder,  JwtTokenVerifier jwtTokenVerifier,  AuthenticationEntryPoint authEntryPoint){
+    public  SecurityConfig (CantineUserDailsService cantineUserDailsService , BCryptPasswordEncoder bCryptPasswordEncoder,  JwtTokenVerifier jwtTokenVerifier,  DelegatedAuthenticationEntryPoint authEntryPoint){
         this.cantineUserDailsService =  cantineUserDailsService ;
         this.bCryptPasswordEncoder =  bCryptPasswordEncoder;
         this.jwtTokenVerifier   =  jwtTokenVerifier;
@@ -48,6 +48,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain (HttpSecurity http) throws Exception {
 
      return  http.csrf(csrf->csrf.disable())
+
              .cors(Customizer.withDefaults())
              .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
              .authorizeRequests(
@@ -60,13 +61,13 @@ public class SecurityConfig {
                          authorized.anyRequest().authenticated();
                      }
              )
-
+             .exceptionHandling()
+             .authenticationEntryPoint(authEntryPoint)
+             .accessDeniedHandler(authEntryPoint)
+             .and()
              .authenticationProvider(authenticationProvider())
              .addFilter( new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager()))
              .addFilterBefore(jwtTokenVerifier, JwtUsernameAndPasswordAuthenticationFilter.class)
-             .exceptionHandling()
-             .authenticationEntryPoint(authEntryPoint)
-             .and()
              .build();
    }
 

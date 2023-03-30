@@ -2,11 +2,13 @@ package fr.sali.cantine.service.exception;
 
 
 import fr.sali.cantine.dto.out.ExceptionDto;
+import fr.sali.cantine.springsecurity.DelegatedAuthenticationEntryPoint;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -20,13 +22,19 @@ public class HandlerException{
 
     private static final Logger LOG = LogManager.getLogger();
 
-    @ExceptionHandler(AuthenticationException.class )
-    public ResponseEntity<ExceptionDto> handleAuthenticationException(Exception ex) {
+   /* @ExceptionHandler({AuthenticationException.class} )
+    public ResponseEntity<ExceptionDto> handleAuthenticationException(AuthenticationException ex) {
         System.out.println(ex);
+
         return new ResponseEntity<ExceptionDto>(new ExceptionDto(" Conmpte disactiver ") , HttpStatus.UNAUTHORIZED);
+    }*/
 
+    @ExceptionHandler({InsufficientAuthenticationException.class} )
+    public ResponseEntity<ExceptionDto> handleAuthenticationException(InsufficientAuthenticationException ex) {
+        System.out.println(ex);
+        System.out.println(ex.getMessage());
+        return new ResponseEntity<ExceptionDto>(new ExceptionDto(" La vrais  disactivation") , HttpStatus.UNAUTHORIZED);
     }
-
 
 
     @ExceptionHandler(MenuException.class)

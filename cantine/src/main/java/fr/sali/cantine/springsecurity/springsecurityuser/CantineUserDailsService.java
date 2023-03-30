@@ -17,8 +17,10 @@ public class CantineUserDailsService implements UserDetailsService {
     IUserDao iUserDao ;
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
         var  userOptional =  iUserDao.findByEmail(username);
         if (!userOptional.isPresent()) {
+            System.out.println("hello wolrd  ");
             throw   new UsernameNotFoundException("this  User Doest not exist");
         }
         var user =  userOptional.get();

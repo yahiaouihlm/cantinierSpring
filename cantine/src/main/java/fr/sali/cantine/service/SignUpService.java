@@ -120,8 +120,9 @@ public class SignUpService {
 
         SimpleMailMessage mailMessage =  new SimpleMailMessage();
         mailMessage.setTo(userEntity.getEmail());
+        System.out.println("je vais  envoyer le mail  a  " + userEntity.getEmail());
         mailMessage.setSubject("Confirm Your Acount ");
-        mailMessage.setFrom("Administration@social.aston-ecole.com");
+        mailMessage.setFrom("yahiaouiali4019@gmail.com");
         mailMessage.setText("Hello \n " + userEntity.getUsername() + " "+ userEntity.getUserfname() +"\n" + "To Confirm  your  Account Please click  here :  http://localhost:8080/cantine/user/confirm-acount?token="+ confirmationToken.getConfirmationToken());
         this.emailSenderService.sendEmail(mailMessage);
     }

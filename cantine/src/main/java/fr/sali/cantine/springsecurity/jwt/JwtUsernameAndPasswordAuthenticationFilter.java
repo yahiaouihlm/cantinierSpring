@@ -38,7 +38,7 @@ public class JwtUsernameAndPasswordAuthenticationFilter  extends UsernamePasswor
 
 
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws DisabledException ,AuthenticationException {
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         var  username =  request.getParameter("username");
         var passsword  = request.getParameter("password");
         if (ObjectUtils.isEmpty(username) || ObjectUtils.isEmpty(passsword) ) {
@@ -67,8 +67,8 @@ public class JwtUsernameAndPasswordAuthenticationFilter  extends UsernamePasswor
 
     //    try {
             Authentication  authentication =  new UsernamePasswordAuthenticationToken(username , passsword );
-             ///
 
+             ///
         return this.authenticationManager.authenticate(authentication) ;
 /*       }catch (  Exception  e ) {
             System.out.println(e);
