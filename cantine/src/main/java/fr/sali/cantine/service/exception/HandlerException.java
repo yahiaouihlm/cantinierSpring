@@ -36,6 +36,13 @@ public class HandlerException{
         return new ResponseEntity<ExceptionDto>(new ExceptionDto(" La vrais  disactivation") , HttpStatus.UNAUTHORIZED);
     }
 
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ExceptionDto> exceptionHandler ( UserNotFoundException  exception )  {
+        HandlerException.LOG.info("USER NOT   FOUND  :  { }" ,  exception.getMessage());
+        return new ResponseEntity<ExceptionDto>(new ExceptionDto("USER NOT FOUND ") , HttpStatus.NOT_FOUND);
+    }
+
+    /*************************** Menu Exceptions  Handler *****************************/
 
     @ExceptionHandler(MenuException.class)
     public ResponseEntity<ExceptionDto> exceptionHandler (MenuException exception){

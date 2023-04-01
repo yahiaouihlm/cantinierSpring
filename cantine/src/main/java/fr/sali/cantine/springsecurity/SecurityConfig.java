@@ -54,7 +54,8 @@ public class SecurityConfig {
              .authorizeRequests(
                      authorized->{
                          authorized.antMatchers("/cantine/user/signUP", "/cantine/upload").permitAll();
-                         authorized.antMatchers("/cantine/user/existemail","/cantine/users/activatedAcount/**" , "/cantine/user/confirm-acount/**").permitAll();
+                         authorized.antMatchers("/cantine/user/existemail","/cantine/users/activatedAcount/**" ,
+                                 "/cantine/user/confirm-acount/**", "/cantine/users/forgetpassword").permitAll();
                          authorized.antMatchers("/cantine/download/**").permitAll();
                          authorized.antMatchers("/cantine/meals",  "cantine/meals/getOne/**").permitAll();
                          authorized.antMatchers("/cantine/menus/getMenus").permitAll();
