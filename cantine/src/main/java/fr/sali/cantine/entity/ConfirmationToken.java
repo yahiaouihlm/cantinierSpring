@@ -4,6 +4,7 @@ package fr.sali.cantine.entity;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.Random;
 import java.util.UUID;
 
 
@@ -20,6 +21,11 @@ public class ConfirmationToken {
     @Column(name = "confirmationtoken")
     private  String confirmationToken;
 
+
+
+
+    @Column(name = "uuiduser")
+    private  Integer useruuid ;
     @Column(name = "createddate")
     @Temporal(TemporalType.TIMESTAMP )
     private Date createdDate;
@@ -33,6 +39,7 @@ public class ConfirmationToken {
         this.user = user;
         createdDate = new Date();
         confirmationToken = UUID.randomUUID().toString();
+        useruuid =  new Random().nextInt((9999999 - 1000000) + 1) + 1000000 ;
     }
     public  ConfirmationToken(){}
     public Integer getTokenid() {
@@ -65,5 +72,14 @@ public class ConfirmationToken {
 
     public void setUser(UserEntity user) {
         this.user = user;
+    }
+
+
+    public Integer getUseruuid() {
+        return useruuid;
+    }
+
+    public void setUseruuid(Integer useruuid) {
+        this.useruuid = useruuid;
     }
 }
