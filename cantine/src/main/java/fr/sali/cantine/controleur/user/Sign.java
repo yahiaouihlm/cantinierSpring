@@ -10,6 +10,7 @@ import fr.sali.cantine.dto.in.MealtDto;
 import fr.sali.cantine.dto.in.UserDto;
 import fr.sali.cantine.dto.out.UserDtout;
 import fr.sali.cantine.service.SignUpService;
+import fr.sali.cantine.service.exception.ExpiredCode;
 import fr.sali.cantine.service.user.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -66,7 +67,7 @@ public class Sign {
         catch (IllegalArgumentException e){
             html = "<html><body><h1>Le lien est invalide.</h1></body></html>";
         }
-        catch (RuntimeException e){
+        catch (ExpiredCode e){
             html = "<html><body><h1>Le lien est expiré.</h1></body></html>";
         } catch (Exception e){
          html = "<html><body><h1>Le lien est invalide.</h1></body></html>";

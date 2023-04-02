@@ -1,20 +1,29 @@
 package fr.sali.cantine.service;
 
 
+import fr.sali.cantine.dao.IConfirmationToken;
 import fr.sali.cantine.dao.IUserDao;
+import fr.sali.cantine.dto.in.UserValidationCode;
 import fr.sali.cantine.entity.ConfirmationToken;
 import fr.sali.cantine.entity.UserEntity;
+import fr.sali.cantine.service.exception.ExpiredCode;
+import fr.sali.cantine.service.exception.InvalidUserCode;
 import fr.sali.cantine.service.exception.UserNotFoundException;
 import fr.sali.cantine.service.mailer.EmailSenderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class ForgetPasswordService {
 
         @Autowired
         IUserDao  iUserDao;
+
+        @Autowired
+    IConfirmationToken iConfirmationToken;
     @Autowired
     private EmailSenderService emailSenderService ;
         public  void  sendMailToUpdatePassword  ( String email )  throws UserNotFoundException {
@@ -26,7 +35,7 @@ public class ForgetPasswordService {
                   throw   new UserNotFoundException(" User Not  Found  with  Email = " +   email );
             var  user =  userEntity.get();
             ConfirmationToken token  =  new ConfirmationToken(user);
-
+            this.iConfirmationToken.save(token);
             SimpleMailMessage mailMessage =  new SimpleMailMessage();
             mailMessage.setTo(user.getEmail());
             System.out.println("je vais  envoyer le mail  a  " +user.getEmail());
@@ -37,6 +46,49 @@ public class ForgetPasswordService {
         }
 
 
+
+        public UserEntity checkCodeValidator  (String  email , Integer  code ) throws InvalidUserCode, UserNotFoundException, ExpiredCode {
+            System.out.println(code);
+
+            if (email == null || code == null || email.isEmpty() || code < 1000000 )
+                 throw  new  InvalidUserCode("Invalid User Code ");
+
+
+            Optional<UserEntity> byEmail = this.iUserDao.findByEmail(email);
+              if  (!byEmail.isPresent())
+                  throw new UserNotFoundException("User Not Found ");
+
+
+
+            Optional<ConfirmationToken> byUuiduser = this.iConfirmationToken.findByUuiduser(code);
+            if (!byUuiduser.isPresent())
+                     throw   new InvalidUserCode("Invalid Code ");
+
+
+
+            if  (!byUuiduser.get().getUser().getEmail().equals(byEmail.get().getEmail()))
+                         throw  new  InvalidUserCode ("USER NOT  FOUND  ");
+
+            var tokenDB =  byUuiduser.get();
+            var  expiredTime  = System.currentTimeMillis() - tokenDB.getCreatedDate().getTime();
+            long fiveMinutesInMillis = 30 * 60 * 1000; // 5 minutes en millisecondes
+            if (expiredTime > fiveMinutesInMillis){
+                this.iConfirmationToken.delete(tokenDB);
+                throw  new ExpiredCode("Token Has Been Expired ");
+            }
+
+            return  byEmail.get() ;
+
+        }
+
+
+        /* TODO  continuer a travailler sur le  changepassword  */
+
+        public  void  changePassword (UserValidationCode userinfo ) throws UserNotFoundException, InvalidUserCode, ExpiredCode {
+           var  user =   checkCodeValidator(userinfo.getEmail(), userinfo.getCode());
+           var  newpassword =  userinfo.getPassword()
+           if  (newpassword.)
+        }
 
 
 }

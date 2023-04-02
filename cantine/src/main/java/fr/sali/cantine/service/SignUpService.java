@@ -7,6 +7,7 @@ import fr.sali.cantine.entity.ConfirmationToken;
 import fr.sali.cantine.entity.ImageEntity;
 import fr.sali.cantine.entity.RoleEntity;
 import fr.sali.cantine.entity.UserEntity;
+import fr.sali.cantine.service.exception.ExpiredCode;
 import fr.sali.cantine.service.images.ImageService;
 import fr.sali.cantine.service.mailer.EmailSenderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +55,7 @@ public class SignUpService {
         long fiveMinutesInMillis = 5 * 60 * 1000; // 5 minutes en millisecondes
         if (expiredTime > fiveMinutesInMillis){
             this.iConfirmationToken.delete(tokenDB);
-            throw  new RuntimeException("Token Has Been Expired ");
+            throw  new ExpiredCode("Token Has Been Expired ");
         }
         var  userOpt =  this.userDao.findByEmail(tokenDB.getUser().getEmail());
         if (!userOpt.isPresent()){

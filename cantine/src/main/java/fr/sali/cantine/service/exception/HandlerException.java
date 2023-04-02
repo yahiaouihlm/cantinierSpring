@@ -34,6 +34,13 @@ public class HandlerException{
         System.out.println(ex);
         System.out.println(ex.getMessage());
         return new ResponseEntity<ExceptionDto>(new ExceptionDto(" La vrais  disactivation") , HttpStatus.UNAUTHORIZED);
+
+    }
+
+    @ExceptionHandler(InvalidUserCode.class)
+    public ResponseEntity<ExceptionDto> exceptionHandler (InvalidUserCode exception){
+        HandlerException.LOG.info("EXCEPTION HAS BEEN  THROWN ABOUT  :  {}", exception.getMessage());
+        return new ResponseEntity<ExceptionDto>(new ExceptionDto("INVALID   Code ") , HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(UserNotFoundException.class)
@@ -42,6 +49,7 @@ public class HandlerException{
         return new ResponseEntity<ExceptionDto>(new ExceptionDto("USER NOT FOUND ") , HttpStatus.NOT_FOUND);
     }
 
+
     /*************************** Menu Exceptions  Handler *****************************/
 
     @ExceptionHandler(MenuException.class)
@@ -49,6 +57,7 @@ public class HandlerException{
         HandlerException.LOG.info("EXCEPTION HAS BEEN  THROWN ABOUT  :  {}", exception.getMessage());
         return new ResponseEntity<ExceptionDto>(new ExceptionDto("INVALID ARGUMENTS") , HttpStatus.BAD_REQUEST);
     }
+
 
     /*************************************** Meals Exceptions Handler ******************************************/
     @ExceptionHandler(MealException.class)
