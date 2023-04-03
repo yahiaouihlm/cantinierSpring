@@ -52,7 +52,7 @@ public class HandlerException{
     @ExceptionHandler(InvalidUserCode.class)
     public ResponseEntity<ExceptionDto> exceptionHandler (InvalidUserCode exception){
         HandlerException.LOG.info("EXCEPTION HAS BEEN  THROWN ABOUT  :  {}", exception.getMessage());
-        return new ResponseEntity<ExceptionDto>(new ExceptionDto("INVALID   Code ") , HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<ExceptionDto>(new ExceptionDto("INVALID   CODE ") , HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(UserNotFoundException.class)

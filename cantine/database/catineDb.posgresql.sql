@@ -179,7 +179,8 @@ CREATE TABLE IF NOT EXISTS plat_has_commande (
 
 CREATE TABLE confirmationToken (
    tokenid SERIAL PRIMARY KEY,
-   confirmationToken VARCHAR(255),
-   createdDate TIMESTAMP,
+   confirmationToken VARCHAR(255) NOT NULL,
+   createdDate TIMESTAMP NOT NULL,
+   uuiduser   INT NOT NULL,
    user_id INTEGER NOT NULL REFERENCES users(id)
 );

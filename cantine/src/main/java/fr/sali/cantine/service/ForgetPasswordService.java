@@ -39,8 +39,11 @@ public class ForgetPasswordService {
             if  (!userEntity.isPresent())
                   throw   new UserNotFoundException(" User Not  Found  with  Email = " +   email );
             var  user =  userEntity.get();
+
+            // Vérifier si  utilisateur n'a  pas Déja  un  Token  Invalide si  c'est Le cas Le supprimer
+            removeExistingToken(user);
             ConfirmationToken token  =  new ConfirmationToken(user);
-           // this.iConfirmationToken.save(token);
+            this.iConfirmationToken.save(token);
             SimpleMailMessage mailMessage =  new SimpleMailMessage();
             mailMessage.setTo(user.getEmail());
             System.out.println("je vais  envoyer le mail  a  " +user.getEmail());
@@ -77,10 +80,12 @@ public class ForgetPasswordService {
             var tokenDB =  byUuiduser.get();
             var  expiredTime  = System.currentTimeMillis() - tokenDB.getCreatedDate().getTime();
             long fiveMinutesInMillis = 30 * 60 * 1000; // 5 minutes en millisecondes
+
             if (expiredTime > fiveMinutesInMillis){
                 this.iConfirmationToken.delete(tokenDB);
                 throw  new ExpiredCode("Code Has Been Expired ");
             }
+
 
             return  byEmail.get() ;
 
@@ -102,10 +107,21 @@ public class ForgetPasswordService {
            user.setPassword(newpassword);
            this.iUserDao.save(user);
 
-           /*TODO :  Effacer Le copnfirmation  Token  dans  La base de donnes  meme pour  valider le  compte */
+           //  Il faut supprimer  Le Token  Apres utilisation depuis La base de donnes
+            this.iConfirmationToken.delete(this.iConfirmationToken.findByUuiduser(userinfo.getCode()).get());
+
 
         }
 
+
+        public  void    removeExistingToken (UserEntity  user) {
+            var  tokenOptional  =this.iConfirmationToken.findByUser(user);
+             if (tokenOptional.isPresent()){
+                 this.iConfirmationToken.delete(tokenOptional.get());
+                return;
+             }
+             return;
+        }
 
 
 
