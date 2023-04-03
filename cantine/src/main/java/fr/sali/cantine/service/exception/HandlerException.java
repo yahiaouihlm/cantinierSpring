@@ -37,6 +37,18 @@ public class HandlerException{
 
     }
 
+
+    @ExceptionHandler(ExpiredCode.class)
+    public ResponseEntity<ExceptionDto> exceptionHandler (ExpiredCode exception){
+        HandlerException.LOG.info("EXCEPTION HAS BEEN  THROWN ABOUT  :  {}", exception.getMessage());
+        return new ResponseEntity<ExceptionDto>(new ExceptionDto("INVALID   INFORMATION ") , HttpStatus.NOT_ACCEPTABLE);
+    }
+    @ExceptionHandler(InvalidInformation.class)
+    public ResponseEntity<ExceptionDto> exceptionHandler (InvalidInformation exception){
+        HandlerException.LOG.info("EXCEPTION HAS BEEN  THROWN ABOUT  :  {}", exception.getMessage());
+        return new ResponseEntity<ExceptionDto>(new ExceptionDto("INVALID   INFORMATION ") , HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(InvalidUserCode.class)
     public ResponseEntity<ExceptionDto> exceptionHandler (InvalidUserCode exception){
         HandlerException.LOG.info("EXCEPTION HAS BEEN  THROWN ABOUT  :  {}", exception.getMessage());
@@ -50,6 +62,10 @@ public class HandlerException{
     }
 
 
+
+
+
+
     /*************************** Menu Exceptions  Handler *****************************/
 
     @ExceptionHandler(MenuException.class)
@@ -57,6 +73,10 @@ public class HandlerException{
         HandlerException.LOG.info("EXCEPTION HAS BEEN  THROWN ABOUT  :  {}", exception.getMessage());
         return new ResponseEntity<ExceptionDto>(new ExceptionDto("INVALID ARGUMENTS") , HttpStatus.BAD_REQUEST);
     }
+
+
+
+
 
 
     /*************************************** Meals Exceptions Handler ******************************************/
